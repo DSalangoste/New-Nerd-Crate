@@ -1,6 +1,8 @@
 class CrateTypesController < ApplicationController
   def index
-    @crate_types = CrateType.page(params[:page]).per(12)  # Show 12 items per page
+    @crate_types = CrateType.search(search_params)
+                           .page(params[:page])
+                           .per(12)
   end
 
   def show
@@ -8,5 +10,11 @@ class CrateTypesController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     flash[:error] = "Crate type not found"
     redirect_to root_path
+  end
+
+  private
+
+  def search_params
+    params.permit(:search, :category_id)
   end
 end 

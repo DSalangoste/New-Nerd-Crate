@@ -1,0 +1,16 @@
+<div class="mb-8 bg-white p-6 rounded-lg shadow">
+  <%= form_tag crate_types_path, method: :get, class: "flex flex-col md:flex-row gap-4" do %>
+    <div class="flex-grow">
+      <%= text_field_tag :search, params[:search], 
+          class: "w-full px-4 py-2 border rounded-md", 
+          placeholder: "Search crates by name or description..." %>
+    </div>
+    <div class="w-full md:w-64">
+      <%= select_tag :category_id,
+          options_for_select([["All Categories", ""]] + Category.all.map { |c| [c.name, c.id] }, 
+          params[:category_id]),
+          class: "w-full px-4 py-2 border rounded-md" %>
+    </div>
+    <%= submit_tag "Search", class: "px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" %>
+  <% end %>
+</div> 
