@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  crate_type: one
+  status: MyString
+  total_price: 9.99
+
+two:
+  user: two
+  crate_type: two
+  status: MyString
+  total_price: 9.99

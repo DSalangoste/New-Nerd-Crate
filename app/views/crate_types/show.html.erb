@@ -1,0 +1,46 @@
+<div class="container py-5">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><%= link_to "Home", root_path %></li>
+      <li class="breadcrumb-item active" aria-current="page"><%= @crate_type.name %></li>
+    </ol>
+  </nav>
+
+  <div class="row">
+    <div class="col-md-8">
+      <h1 class="mb-4"><%= @crate_type.name %></h1>
+      <div class="card mb-4">
+        <div class="card-body">
+          <p class="lead"><%= @crate_type.description %></p>
+          <% if @crate_type.categories.any? %>
+            <div class="mb-3">
+              <h5>Categories:</h5>
+              <div class="d-flex gap-2 flex-wrap">
+                <% @crate_type.categories.each do |category| %>
+                  <span class="badge bg-secondary"><%= category.name %></span>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Subscription Details</h5>
+          <p class="card-text">
+            <strong>Price:</strong>
+            <span class="h4 d-block mb-3"><%= number_to_currency(@crate_type.price) %>/month</span>
+          </p>
+          <% if user_signed_in? %>
+            <%= button_to "Subscribe Now", "#", method: :post, class: "btn btn-primary btn-lg w-100" %>
+          <% else %>
+            <%= link_to "Sign in to Subscribe", new_user_session_path, class: "btn btn-primary btn-lg w-100" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

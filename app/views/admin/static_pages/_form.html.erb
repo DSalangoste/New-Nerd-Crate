@@ -1,0 +1,26 @@
+<%= form_for :static_pages, url: admin_static_pages_update_path, method: :post do |f| %>
+    <div class="panel">
+      <h3>About Page Content</h3>
+      <div class="panel_contents">
+        <%= f.text_area :about, 
+            value: File.exist?(Rails.root.join('app', 'views', 'pages', '_about_content.html.erb')) ? 
+                  File.read(Rails.root.join('app', 'views', 'pages', '_about_content.html.erb')) : '',
+            rows: 15,
+            style: "width: 100%;" %>
+      </div>
+    </div>
+  
+    <div class="panel">
+      <h3>Contact Page Content</h3>
+      <div class="panel_contents">
+        <%= f.text_area :contact,
+            value: File.exist?(Rails.root.join('app', 'views', 'pages', '_contact_content.html.erb')) ? 
+                  File.read(Rails.root.join('app', 'views', 'pages', '_contact_content.html.erb')) : '',
+            rows: 15,
+            style: "width: 100%;" %>
+      </div>
+    </div>
+  
+    <%= f.submit "Update Pages", class: "button" %>
+  <% end %>
+  
