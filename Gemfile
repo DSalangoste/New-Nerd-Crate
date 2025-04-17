@@ -21,6 +21,9 @@ gem 'formtastic', '~> 5.0'
 gem 'inherited_resources'
 gem 'jquery-rails'
 
+# Pagination
+gem 'kaminari'
+
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
 end

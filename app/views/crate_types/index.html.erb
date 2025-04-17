@@ -1,0 +1,13 @@
+<div class="container mx-auto px-4">
+  <h1 class="text-3xl font-bold mb-6">Our Crate Types</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <% @crate_types.each do |crate_type| %>
+      <!-- existing crate type card code -->
+    <% end %>
+  </div>
+
+  <div class="mt-8 flex justify-center">
+    <%= paginate @crate_types %>
+  </div>
+</div> 
