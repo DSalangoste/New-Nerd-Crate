@@ -354,6 +354,6 @@ ActiveAdmin.setup do |config|
   #
   # Configure the asset pipeline for ActiveAdmin
   #
-  config.register_stylesheet 'active_admin.scss'
+  config.register_stylesheet 'active_admin.css'
   config.register_javascript 'active_admin.js'
 end
