@@ -1,0 +1,69 @@
+<%= form_with(model: address, class: "max-w-md") do |f| %>
+  <% if address.errors.any? %>
+    <div class="mb-4 p-4 bg-red-50 rounded-md">
+      <h2 class="text-red-700 text-sm font-medium"><%= pluralize(address.errors.count, "error") %> prohibited this address from being saved:</h2>
+      <ul class="mt-2 text-sm text-red-600">
+        <% address.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-2 gap-4 mb-4">
+    <div>
+      <%= f.label :first_name, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :first_name, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+    </div>
+
+    <div>
+      <%= f.label :last_name, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :last_name, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :address_line_1, class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :address_line_1, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+  </div>
+
+  <div class="mb-4">
+    <%= f.label :address_line_2, class: "block text-sm font-medium text-gray-700" %>
+    <%= f.text_field :address_line_2, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4 mb-4">
+    <div>
+      <%= f.label :city, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :city, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+    </div>
+
+    <div>
+      <%= f.label :province_id, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.collection_select :province_id, @provinces, :id, :name,
+          { prompt: "Select a province" },
+          class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4 mb-4">
+    <div>
+      <%= f.label :postal_code, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :postal_code, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+    </div>
+
+    <div>
+      <%= f.label :country, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :country, value: "Canada", readonly: true, class: "mt-1 block w-full rounded-md border-gray-300 bg-gray-50 shadow-sm" %>
+    </div>
+  </div>
+
+  <div class="mb-6">
+    <%= f.label :phone, class: "block text-sm font-medium text-gray-700" %>
+    <%= f.telephone_field :phone, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+  </div>
+
+  <div>
+    <%= f.submit class: "w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" %>
+  </div>
+<% end %> 

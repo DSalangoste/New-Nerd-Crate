@@ -28,4 +28,8 @@ Rails.application.routes.draw do
   end
 
   get 'checkout', to: 'checkout#index', as: :checkout
+
+  resources :addresses, except: [:index, :show]
+
+  resources :orders, only: [:index]
 end

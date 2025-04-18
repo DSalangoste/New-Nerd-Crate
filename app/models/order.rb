@@ -12,6 +12,7 @@ class Order < ApplicationRecord
 
   scope :completed, -> { where(status: 'completed') }
   scope :pending, -> { where(status: 'pending') }
+  scope :processing, -> { where(status: 'processing') }
   scope :cart, -> { where(status: 'cart') }
 
   def total_items
