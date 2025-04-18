@@ -350,6 +350,4 @@ ActiveAdmin.setup do |config|
   #
   # config.use_webpacker = true
 
-  # == Asset Pipeline
-
 end
