@@ -34,10 +34,10 @@
             <strong>Price:</strong>
             <span class="h4 d-block mb-3"><%= number_to_currency(@crate_type.price) %>/month</span>
           </p>
-          <% if user_signed_in? %>
-            <%= button_to "Subscribe Now", "#", method: :post, class: "btn btn-primary btn-lg w-100" %>
-          <% else %>
-            <%= link_to "Sign in to Subscribe", new_user_session_path, class: "btn btn-primary btn-lg w-100" %>
+          <%= button_to add_cart_path(crate_type_id: @crate_type.id), 
+              class: "btn btn-primary w-100",
+              method: :post do %>
+            Add to Cart
           <% end %>
         </div>
       </div>

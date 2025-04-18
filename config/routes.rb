@@ -20,4 +20,10 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  resource :cart, only: [:show] do
+    post 'add'
+    delete 'remove'
+    patch 'update', as: 'update_quantity'
+  end
 end
