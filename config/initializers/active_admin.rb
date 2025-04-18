@@ -350,4 +350,4 @@ ActiveAdmin.setup do |config|
   #
   # config.use_webpacker = true
 
-end
+end  # Make sure this is the very last line
