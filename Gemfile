@@ -24,11 +24,16 @@ gem 'formtastic', '~> 5.0'
 gem 'inherited_resources'
 gem 'jquery-rails'
 
+# Asset Pipeline
+gem 'uglifier'
+gem 'sprockets-rails'
+
 # Pagination
 gem 'kaminari'
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
+  gem 'sqlite3'
 end
 
 group :development do
