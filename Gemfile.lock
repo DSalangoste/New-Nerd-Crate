@@ -325,7 +325,7 @@ DEPENDENCIES
   rails (~> 7.1.0)
   redis (~> 4.0)
   sass-rails (~> 6.0)
-  sassc-rails
+  sassc-rails (~> 2.1)
   stimulus-rails
   turbo-rails
   tzinfo-data

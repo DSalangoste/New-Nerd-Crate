@@ -354,11 +354,6 @@ ActiveAdmin.setup do |config|
   #
   # Configure the asset pipeline for ActiveAdmin
   #
-  config.register_stylesheet 'active_admin.css'
+  config.register_stylesheet 'active_admin.css.scss'
   config.register_javascript 'active_admin.js'
-  
-  # Enable asset compilation in development
-  if Rails.env.development?
-    config.asset_pipeline = true
-  end
 end
