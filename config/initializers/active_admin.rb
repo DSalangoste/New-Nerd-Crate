@@ -351,9 +351,5 @@ ActiveAdmin.setup do |config|
   # config.use_webpacker = true
 
   # == Asset Pipeline
-  #
-  # Configure the asset pipeline for ActiveAdmin
-  #
-  config.register_stylesheet 'activeadmin'
-  config.register_javascript 'activeadmin'
+
 end
