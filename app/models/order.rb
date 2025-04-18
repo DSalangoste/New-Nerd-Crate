@@ -1,58 +1,42 @@
 class Order < ApplicationRecord
-  belongs_to :user
-  belongs_to :crate_type
-  has_many :ordered_crates, dependent: :destroy
+  belongs_to :user, optional: true
+  has_many :order_items, dependent: :destroy
+  has_many :crate_types, through: :order_items
+  has_one :billing_address, -> { where(address_type: 'billing') }, class_name: 'Address'
+  has_one :shipping_address, -> { where(address_type: 'shipping') }, class_name: 'Address'
 
-  validates :user, presence: true
-  validates :crate_type, presence: true
-  validates :status, presence: true
-  validates :total_price, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :status, presence: true, inclusion: { in: %w[cart pending processing completed cancelled] }
+  validates :payment_status, inclusion: { in: %w[pending paid failed refunded], allow_nil: true }
+  validates :subtotal_cents, :tax_cents, :shipping_cents, :total_cents, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :shipping_method, inclusion: { in: %w[standard express], allow_nil: true }
 
-  # Define possible statuses
-  enum status: {
-    pending: 'pending',
-    processing: 'processing',
-    paid: 'paid',
-    shipped: 'shipped',
-    delivered: 'delivered',
-    cancelled: 'cancelled'
-  }
+  scope :completed, -> { where(status: 'completed') }
+  scope :pending, -> { where(status: 'pending') }
+  scope :cart, -> { where(status: 'cart') }
 
-  # Callbacks
-  before_validation :set_default_status, on: :create
-  before_validation :calculate_total_price
+  def total_items
+    order_items.sum(:quantity)
+  end
 
-  # Helper methods
-  def add_crate(crate_type, customization_options = {})
-    ordered_crates.create!(
-      crate_type: crate_type,
-      customization_options: customization_options
+  def calculate_totals
+    self.subtotal_cents = order_items.sum { |item| item.quantity * item.crate_type.price_cents }
+    self.tax_cents = (subtotal_cents * 0.1).round # 10% tax rate
+    self.shipping_cents = shipping_method == 'express' ? 1500 : 500 # $15 for express, $5 for standard
+    self.total_cents = subtotal_cents + tax_cents + shipping_cents
+  end
+
+  def mark_as_completed
+    update(
+      status: 'completed',
+      completed_at: Time.current
     )
   end
 
-  def total_items
-    ordered_crates.count
-  end
-
   def self.ransackable_associations(auth_object = nil)
-    ["crate_type", "ordered_crates", "user"]
+    ["crate_types", "order_items", "billing_address", "shipping_address", "user"]
   end
 
   def self.ransackable_attributes(auth_object = nil)
-    ["created_at", "id", "status", "total_price", "updated_at"]
-  end
-
-  private
-
-  def set_default_status
-    self.status ||= :pending
-  end
-
-  def calculate_total_price
-    return if ordered_crates.empty?
-    
-    self.total_price = ordered_crates.sum do |crate|
-      crate.crate_type.price
-    end
+    ["created_at", "id", "status", "total_cents", "updated_at"]
   end
 end

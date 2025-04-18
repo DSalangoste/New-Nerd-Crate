@@ -56,6 +56,26 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_17_010220) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "addresses", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "order_id"
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.string "address_line_1", null: false
+    t.string "address_line_2"
+    t.string "city", null: false
+    t.string "state", null: false
+    t.string "postal_code", null: false
+    t.string "country", null: false
+    t.string "phone", null: false
+    t.string "address_type"
+    t.boolean "default", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_addresses_on_order_id"
+    t.index ["user_id"], name: "index_addresses_on_user_id"
+  end
+
   create_table "admin_users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -102,7 +122,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_17_010220) do
   create_table "orders", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "crate_type_id", null: false
-    t.string "status"
+    t.string "status", default: "cart"
     t.decimal "total_price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -111,6 +131,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_17_010220) do
     t.string "tracking_number"
     t.string "email"
     t.string "phone"
+    t.string "payment_intent_id"
+    t.string "payment_method_id"
+    t.integer "subtotal_cents"
+    t.integer "tax_cents"
+    t.integer "shipping_cents"
+    t.integer "total_cents"
+    t.string "shipping_method"
+    t.text "notes"
+    t.datetime "completed_at"
     t.index ["crate_type_id"], name: "index_orders_on_crate_type_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
@@ -129,6 +158,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_17_010220) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "addresses", "orders"
+  add_foreign_key "addresses", "users"
   add_foreign_key "ordered_crates", "crate_types"
   add_foreign_key "ordered_crates", "orders"
   add_foreign_key "orders", "crate_types"

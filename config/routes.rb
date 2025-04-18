@@ -26,4 +26,6 @@ Rails.application.routes.draw do
     delete 'remove'
     patch 'update', as: 'update_quantity'
   end
+
+  get 'checkout', to: 'checkout#index', as: :checkout
 end
