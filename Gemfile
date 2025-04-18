@@ -2,7 +2,6 @@ source "https://rubygems.org"
 
 # Core Rails gems
 gem "rails", "~> 7.1.0"
-gem "pg", "~> 1.1"
 gem "puma", ">= 5.0"
 gem "importmap-rails"
 gem "turbo-rails"
@@ -11,6 +10,10 @@ gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
 gem 'image_processing', '~> 1.2'
+
+# Database and Caching
+gem "pg", "~> 1.1"  # PostgreSQL adapter
+gem 'redis', '~> 4.0'  # Required for Action Cable
 
 # Authentication & Admin
 gem 'devise', '~> 4.9'
@@ -30,9 +33,4 @@ end
 
 group :development do
   gem "web-console"
-end
-
-group :production do
-  gem 'pg'  # PostgreSQL adapter
-  gem 'redis', '~> 4.0'  # Required for Action Cable
 end

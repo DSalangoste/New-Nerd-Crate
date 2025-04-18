@@ -250,6 +250,7 @@ GEM
       i18n
     rdoc (6.13.1)
       psych (>= 4.0.0)
+    redis (4.8.1)
     reline (0.6.1)
       io-console (~> 0.5)
     responders (3.1.1)
@@ -322,6 +323,7 @@ DEPENDENCIES
   pg (~> 1.1)
   puma (>= 5.0)
   rails (~> 7.1.0)
+  redis (~> 4.0)
   sass-rails (~> 6.0)
   sassc-rails
   stimulus-rails
