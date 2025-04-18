@@ -18,5 +18,19 @@
         <% end %>
       <% end %>
     </nav>
+
+    <!-- Auth Links -->
+    <div class="d-flex align-items-center">
+      <% if user_signed_in? %>
+        <%= button_to "Log Out", destroy_user_session_path, 
+            method: :delete, 
+            class: "btn btn-outline-light ms-2" %>
+      <% else %>
+        <%= link_to "Log In", new_user_session_path, 
+            class: "btn btn-outline-light me-2" %>
+        <%= link_to "Sign Up", new_user_registration_path, 
+            class: "btn btn-light" %>
+      <% end %>
+    </div>
   </div>
 </header> 
