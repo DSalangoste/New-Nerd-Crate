@@ -17,10 +17,9 @@ gem "pg", "~> 1.1"  # PostgreSQL adapter
 gem 'redis', '~> 4.0'  # Required for Action Cable
 
 # Authentication & Admin
+gem 'devise', '~> 4.9'
 gem 'sassc-rails', '~> 2.1'
 gem 'activeadmin', '~> 3.3.0'
-gem 'devise', '~> 4.9'
-gem 'sass-rails', '~> 6.0'
 gem 'formtastic', '~> 5.0'
 gem 'inherited_resources'
 gem 'jquery-rails'
