@@ -2,7 +2,7 @@
 $primary-color: #2d3748;
 
 // Active Admin's built-in CSS
-@import "active_admin/_mixins";
-@import "active_admin/_base";
+@import "@activeadmin/mixins";
+@import "@activeadmin/base";
 
 // Your custom ActiveAdmin styles can go here 
