@@ -349,4 +349,16 @@ ActiveAdmin.setup do |config|
   # You can switch to using Webpacker here.
   #
   # config.use_webpacker = true
+
+  # == Asset Pipeline
+  #
+  # Configure the asset pipeline for ActiveAdmin
+  #
+  config.register_stylesheet 'active_admin.css'
+  config.register_javascript 'active_admin.js'
+  
+  # Enable asset compilation in development
+  if Rails.env.development?
+    config.asset_pipeline = true
+  end
 end

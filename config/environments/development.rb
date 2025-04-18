@@ -15,18 +15,9 @@ Rails.application.configure do
   # Enable server timing.
   config.server_timing = true
 
-  # Enable/disable Action Controller caching. By default Action Controller caching is disabled.
-  # Run rails dev:cache to toggle Action Controller caching.
-  if Rails.root.join("tmp/caching-dev.txt").exist?
-    config.action_controller.perform_caching = true
-    config.action_controller.enable_fragment_cache_logging = true
-    config.public_file_server.headers = { "cache-control" => "public, max-age=#{2.days.to_i}" }
-  else
-    config.action_controller.perform_caching = false
-  end
-
-  # Change to :null_store to avoid any caching.
-  config.cache_store = :memory_store
+  # Enable/disable caching
+  config.action_controller.perform_caching = false
+  config.cache_store = :null_store
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
@@ -48,6 +39,15 @@ Rails.application.configure do
 
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
+
+  # Asset pipeline configuration
+  config.assets.debug = true
+  config.assets.compile = true
+  config.assets.enabled = true
+  config.assets.version = '1.0'
+  
+  # Suppress logger output for asset requests.
+  config.assets.quiet = true
 
   # Append comments with runtime information tags to SQL queries in logs.
   config.active_record.query_log_tags_enabled = true
