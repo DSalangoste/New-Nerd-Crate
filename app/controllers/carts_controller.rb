@@ -4,14 +4,7 @@ class CartsController < ApplicationController
   # skip_before_action :authenticate_user!, if: :devise_controller? # Remove this if it exists
 
   def show
-    @cart_items = current_cart.map do |item|
-      crate_type = CrateType.find(item["crate_type_id"].to_i)
-      {
-        crate_type: crate_type,
-        quantity: item["quantity"].to_i,
-        total: crate_type.price * item["quantity"].to_i
-      }
-    end
+    @cart_items = current_cart
     @cart_total = cart_total
   end
 

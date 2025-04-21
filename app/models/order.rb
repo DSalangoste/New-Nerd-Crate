@@ -6,17 +6,17 @@ class Order < ApplicationRecord
   has_one :shipping_address, -> { where(address_type: 'shipping') }, class_name: 'Address'
   has_one :payment
 
-  validates :status, presence: true, inclusion: { in: %w[cart pending processing completed cancelled] }
+  validates :status, presence: true
   validates :payment_status, inclusion: { in: %w[pending paid failed refunded], allow_nil: true }
   validates :subtotal_cents, :tax_cents, :shipping_cents, :total_cents, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
   validates :shipping_method, inclusion: { in: %w[standard express], allow_nil: true }
 
-  scope :completed, -> { where(status: 'completed') }
-  scope :pending, -> { where(status: 'pending') }
-  scope :processing, -> { where(status: 'processing') }
-  scope :cart, -> { where(status: 'cart') }
+  scope :completed, -> { where(status: :completed) }
+  scope :pending, -> { where(status: :pending) }
+  scope :processing, -> { where(status: :processing) }
+  scope :cart, -> { where(status: :cart) }
 
-  enum status: { unpaid: 0, paid: 1, shipped: 2 }
+  enum status: { cart: 0, pending: 1, processing: 2, completed: 3, cancelled: 4 }
 
   def total_items
     order_items.sum(:quantity)
@@ -34,10 +34,7 @@ class Order < ApplicationRecord
   end
 
   def mark_as_completed
-    update(
-      status: 'completed',
-      completed_at: Time.current
-    )
+    update(status: :completed, completed_at: Time.current)
   end
 
   def self.ransackable_associations(auth_object = nil)

@@ -1,8 +1,12 @@
 class PagesController < ApplicationController
   def about
+    @page = StaticPage.find_by(slug: 'about')
+    render_404 unless @page
   end
 
   def contact
+    @page = StaticPage.find_by(slug: 'contact')
+    render_404 unless @page
   end
 
   private

@@ -27,17 +27,11 @@ Rails.application.routes.draw do
     patch 'update', as: 'update_quantity'
   end
 
-  get 'checkout', to: 'checkout#index', as: :checkout
-
+  resources :checkout, only: [:index, :create]
   resources :addresses, except: [:index, :show]
-
-  resources :orders, only: [:index]
-
-  resources :orders do
+  resources :orders, only: [:index, :show] do
     resource :payment, only: [:create]
   end
 
   post 'stripe/webhook', to: 'payments#webhook'
-
-  resources :checkout, only: [:index, :create]
 end

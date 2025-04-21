@@ -11,7 +11,7 @@ class CheckoutController < ApplicationController
   def create
     @order = Order.new(
       user: current_user,
-      status: 'pending',
+      status: :pending,
       payment_status: 'pending'
     )
 
@@ -25,7 +25,7 @@ class CheckoutController < ApplicationController
         @order.order_items.create!(
           crate_type: crate_type,
           quantity: item["quantity"].to_i,
-          price_cents: crate_type.price_cents
+          price_cents: crate_type.price * 100
         )
       end
 
@@ -39,7 +39,7 @@ class CheckoutController < ApplicationController
     redirect_to order_path(@order), notice: 'Order created successfully!'
   rescue ActiveRecord::RecordInvalid => e
     flash[:error] = "Error creating order: #{e.message}"
-    redirect_to checkout_path
+    redirect_to checkout_index_path
   end
 
   private

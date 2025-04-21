@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_04_17_010220) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_21_231428) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -142,6 +142,23 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_17_010220) do
     t.datetime "completed_at"
     t.index ["crate_type_id"], name: "index_orders_on_crate_type_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "pages", force: :cascade do |t|
+    t.string "slug", null: false
+    t.string "title", null: false
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_pages_on_slug", unique: true
+  end
+
+  create_table "static_pages", force: :cascade do |t|
+    t.string "title"
+    t.string "slug"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

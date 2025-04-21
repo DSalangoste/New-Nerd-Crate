@@ -14,7 +14,7 @@
               <p class="text-gray-600">Quantity: <%= item["quantity"] %></p>
             </div>
             <p class="font-medium">
-              $<%= number_with_precision(crate_type.price_cents * item["quantity"].to_i / 100.0, precision: 2) %>
+              $<%= number_with_precision(crate_type.price * item["quantity"].to_i, precision: 2) %>
             </p>
           </div>
         <% end %>
@@ -23,7 +23,7 @@
           <div class="flex justify-between">
             <p class="font-semibold">Total:</p>
             <p class="font-semibold">
-              $<%= number_with_precision(@cart_items.sum { |item| CrateType.find(item["crate_type_id"]).price_cents * item["quantity"].to_i } / 100.0, precision: 2) %>
+              $<%= number_with_precision(@cart_items.sum { |item| CrateType.find(item["crate_type_id"]).price * item["quantity"].to_i }, precision: 2) %>
             </p>
           </div>
         </div>
