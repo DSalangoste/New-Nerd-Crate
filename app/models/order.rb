@@ -4,6 +4,7 @@ class Order < ApplicationRecord
   has_many :crate_types, through: :order_items
   has_one :billing_address, -> { where(address_type: 'billing') }, class_name: 'Address'
   has_one :shipping_address, -> { where(address_type: 'shipping') }, class_name: 'Address'
+  has_one :payment
 
   validates :status, presence: true, inclusion: { in: %w[cart pending processing completed cancelled] }
   validates :payment_status, inclusion: { in: %w[pending paid failed refunded], allow_nil: true }
@@ -15,15 +16,21 @@ class Order < ApplicationRecord
   scope :processing, -> { where(status: 'processing') }
   scope :cart, -> { where(status: 'cart') }
 
+  enum status: { unpaid: 0, paid: 1, shipped: 2 }
+
   def total_items
     order_items.sum(:quantity)
   end
 
   def calculate_totals
-    self.subtotal_cents = order_items.sum { |item| item.quantity * item.crate_type.price_cents }
+    self.subtotal_cents = order_items.sum { |item| item.quantity * item.price_cents }
     self.tax_cents = (subtotal_cents * 0.1).round # 10% tax rate
     self.shipping_cents = shipping_method == 'express' ? 1500 : 500 # $15 for express, $5 for standard
     self.total_cents = subtotal_cents + tax_cents + shipping_cents
+  end
+
+  def total
+    total_cents / 100.0
   end
 
   def mark_as_completed

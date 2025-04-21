@@ -32,4 +32,12 @@ Rails.application.routes.draw do
   resources :addresses, except: [:index, :show]
 
   resources :orders, only: [:index]
+
+  resources :orders do
+    resource :payment, only: [:create]
+  end
+
+  post 'stripe/webhook', to: 'payments#webhook'
+
+  resources :checkout, only: [:index, :create]
 end

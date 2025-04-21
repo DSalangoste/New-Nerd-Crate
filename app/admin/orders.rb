@@ -43,6 +43,11 @@ ActiveAdmin.register Order do
       row :completed_at
       row :shipping_method
       row :notes
+      row :payment do |order|
+        if order.payment
+          "#{order.payment.payment_method} - #{order.payment.transaction_id}"
+        end
+      end
     end
 
     panel "Order Items" do
@@ -93,6 +98,17 @@ ActiveAdmin.register Order do
   filter :total_cents
   filter :created_at
   filter :completed_at
+
+  member_action :mark_as_shipped, method: :put do
+    resource.update(status: :shipped)
+    redirect_to resource_path, notice: "Order marked as shipped"
+  end
+
+  action_item :ship, only: :show do
+    if resource.paid?
+      link_to 'Mark as Shipped', mark_as_shipped_admin_order_path(resource), method: :put
+    end
+  end
 
   # See permitted parameters documentation:
   # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
