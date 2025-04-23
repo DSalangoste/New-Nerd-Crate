@@ -12,13 +12,42 @@ class CheckoutController < ApplicationController
     @order = Order.new(
       user: current_user,
       status: :pending,
-      payment_status: 'pending'
+      payment_status: 'pending',
+      shipping_method: params[:shipping_method]
     )
 
     cart_items = session[:cart] || []
     
     ActiveRecord::Base.transaction do
       @order.save!
+      
+      # Create shipping address
+      @order.create_shipping_address!(
+        user: current_user,
+        first_name: params[:shipping_address][:first_name],
+        last_name: params[:shipping_address][:last_name],
+        address_line_1: params[:shipping_address][:address_line_1],
+        city: params[:shipping_address][:city],
+        province: Province.find_by(code: params[:shipping_address][:state]),
+        postal_code: params[:shipping_address][:postal_code],
+        country: 'Canada',
+        phone: params[:shipping_address][:phone],
+        address_type: 'shipping'
+      )
+
+      # Create billing address
+      @order.create_billing_address!(
+        user: current_user,
+        first_name: params[:billing_address][:first_name],
+        last_name: params[:billing_address][:last_name],
+        address_line_1: params[:billing_address][:address_line_1],
+        city: params[:billing_address][:city],
+        province: Province.find_by(code: params[:billing_address][:state]),
+        postal_code: params[:billing_address][:postal_code],
+        country: 'Canada',
+        phone: params[:billing_address][:phone],
+        address_type: 'billing'
+      )
       
       cart_items.each do |item|
         crate_type = CrateType.find(item["crate_type_id"].to_i)

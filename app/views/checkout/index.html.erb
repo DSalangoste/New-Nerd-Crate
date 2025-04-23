@@ -34,6 +34,52 @@
       <h2 class="text-xl font-semibold mb-4">Complete Order</h2>
       
       <%= form_tag checkout_index_path, method: :post, class: "space-y-4" do %>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="shipping_method">
+            Shipping Method
+          </label>
+          <select name="shipping_method" id="shipping_method" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <option value="standard">Standard Shipping ($5)</option>
+            <option value="express">Express Shipping ($15)</option>
+          </select>
+        </div>
+
+        <div class="mb-4">
+          <h3 class="font-semibold mb-2">Shipping Address</h3>
+          <div class="space-y-2">
+            <input type="text" name="shipping_address[first_name]" placeholder="First Name" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+            <input type="text" name="shipping_address[last_name]" placeholder="Last Name" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+            <input type="text" name="shipping_address[address_line_1]" placeholder="Street Address" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+            <input type="text" name="shipping_address[city]" placeholder="City" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+            <select name="shipping_address[state]" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+              <option value="">Select Province</option>
+              <% Province.all.each do |province| %>
+                <option value="<%= province.code %>"><%= province.name %></option>
+              <% end %>
+            </select>
+            <input type="text" name="shipping_address[postal_code]" placeholder="Postal Code" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+            <input type="tel" name="shipping_address[phone]" placeholder="Phone Number" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h3 class="font-semibold mb-2">Billing Address</h3>
+          <div class="space-y-2">
+            <input type="text" name="billing_address[first_name]" placeholder="First Name" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+            <input type="text" name="billing_address[last_name]" placeholder="Last Name" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+            <input type="text" name="billing_address[address_line_1]" placeholder="Street Address" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+            <input type="text" name="billing_address[city]" placeholder="City" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+            <select name="billing_address[state]" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+              <option value="">Select Province</option>
+              <% Province.all.each do |province| %>
+                <option value="<%= province.code %>"><%= province.name %></option>
+              <% end %>
+            </select>
+            <input type="text" name="billing_address[postal_code]" placeholder="Postal Code" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+            <input type="tel" name="billing_address[phone]" placeholder="Phone Number" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+          </div>
+        </div>
+
         <div class="mb-6">
           <p class="text-gray-600 mb-2">
             By clicking "Place Order", you agree to our terms and conditions.
