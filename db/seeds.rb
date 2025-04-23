@@ -50,3 +50,8 @@ StaticPage.find_or_create_by!(slug: 'contact') do |page|
     <p>partnerships@nerdcrate.com</p>
   CONTENT
 end
+
+# Load all seed files from db/seeds
+Dir[File.join(Rails.root, 'db', 'seeds', '*.rb')].sort.each do |seed|
+  load seed
+end

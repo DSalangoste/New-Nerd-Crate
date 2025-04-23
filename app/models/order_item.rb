@@ -14,6 +14,6 @@ class OrderItem < ApplicationRecord
   private
 
   def set_price_from_crate_type
-    self.price_cents = crate_type&.price_cents
+    self.price_cents = (crate_type&.price * 100).to_i if crate_type&.price
   end
 end 

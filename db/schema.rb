@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_04_21_231428) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_21_235328) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -64,7 +64,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_21_231428) do
     t.string "address_line_1", null: false
     t.string "address_line_2"
     t.string "city", null: false
-    t.string "state", null: false
     t.string "postal_code", null: false
     t.string "country", null: false
     t.string "phone", null: false
@@ -72,7 +71,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_21_231428) do
     t.boolean "default", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "province_id", null: false
     t.index ["order_id"], name: "index_addresses_on_order_id"
+    t.index ["province_id"], name: "index_addresses_on_province_id"
     t.index ["user_id"], name: "index_addresses_on_user_id"
   end
 
@@ -108,6 +109,17 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_21_231428) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "order_items", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "crate_type_id", null: false
+    t.integer "quantity", null: false
+    t.integer "price_cents", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["crate_type_id"], name: "index_order_items_on_crate_type_id"
+    t.index ["order_id"], name: "index_order_items_on_order_id"
+  end
+
   create_table "ordered_crates", force: :cascade do |t|
     t.bigint "order_id", null: false
     t.bigint "crate_type_id", null: false
@@ -121,7 +133,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_21_231428) do
 
   create_table "orders", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.bigint "crate_type_id", null: false
+    t.bigint "crate_type_id"
     t.string "status", default: "cart"
     t.decimal "total_price"
     t.datetime "created_at", null: false
@@ -153,6 +165,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_21_231428) do
     t.index ["slug"], name: "index_pages_on_slug", unique: true
   end
 
+  create_table "provinces", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "code", null: false
+    t.decimal "tax_rate", precision: 5, scale: 2, default: "0.0", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_provinces_on_code", unique: true
+  end
+
   create_table "static_pages", force: :cascade do |t|
     t.string "title"
     t.string "slug"
@@ -176,7 +197,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_21_231428) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "addresses", "orders"
+  add_foreign_key "addresses", "provinces"
   add_foreign_key "addresses", "users"
+  add_foreign_key "order_items", "crate_types"
+  add_foreign_key "order_items", "orders"
   add_foreign_key "ordered_crates", "crate_types"
   add_foreign_key "ordered_crates", "orders"
   add_foreign_key "orders", "crate_types"

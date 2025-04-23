@@ -2,6 +2,7 @@ class CheckoutController < ApplicationController
   before_action :authenticate_user!
   before_action :set_cart
   before_action :ensure_cart_not_empty
+  before_action :set_default_addresses
 
   def index
     @order = Order.new
@@ -81,5 +82,10 @@ class CheckoutController < ApplicationController
     if @cart_items.empty?
       redirect_to cart_path, alert: 'Your cart is empty'
     end
+  end
+
+  def set_default_addresses
+    @default_shipping_address = current_user.addresses.find_by(address_type: 'shipping')
+    @default_billing_address = current_user.addresses.find_by(address_type: 'billing')
   end
 end 

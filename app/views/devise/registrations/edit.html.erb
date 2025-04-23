@@ -46,7 +46,10 @@
 
     <!-- Shipping Information -->
     <div class="bg-white p-6 rounded-lg shadow">
-      <h3 class="text-xl font-semibold mb-4">Shipping Information</h3>
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-semibold">Shipping Information</h3>
+        <%= link_to "+ Add New Address", new_address_path, class: "text-blue-600 hover:text-blue-800" %>
+      </div>
       
       <% if current_user.addresses.any? %>
         <% current_user.addresses.each do |address| %>
@@ -69,11 +72,8 @@
           </div>
         <% end %>
       <% else %>
-        <p class="text-gray-600 mb-4">No shipping addresses saved yet.</p>
+        <p class="text-gray-600 mb-4">You haven't added any shipping addresses yet.</p>
       <% end %>
-
-      <%= link_to "Add New Address", new_address_path,
-          class: "inline-block w-full text-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700" %>
     </div>
   </div>
 

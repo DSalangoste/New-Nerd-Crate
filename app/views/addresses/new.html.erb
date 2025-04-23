@@ -1,0 +1,12 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-2xl mx-auto">
+    <div class="flex items-center justify-between mb-6">
+      <h1 class="text-2xl font-bold">Add New Shipping Address</h1>
+      <%= link_to "← Back to Account", edit_user_registration_path, class: "text-blue-600 hover:text-blue-800" %>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow">
+      <%= render 'form', address: @address %>
+    </div>
+  </div>
+</div> 
