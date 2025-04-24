@@ -8,12 +8,13 @@ class OrderItem < ApplicationRecord
   before_validation :set_price_from_crate_type, on: :create
 
   def total_cents
-    quantity * price_cents
+    quantity * (price_cents || 0)
   end
 
   private
 
   def set_price_from_crate_type
-    self.price_cents = (crate_type&.price * 100).to_i if crate_type&.price
+    return if price_cents.present?
+    self.price_cents = (crate_type&.price.to_f * 100).to_i if crate_type&.price
   end
 end 

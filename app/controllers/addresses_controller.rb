@@ -10,6 +10,11 @@ class AddressesController < ApplicationController
   def create
     @address = current_user.addresses.build(address_params)
     
+    # If this is the first address of its type, make it default
+    if current_user.addresses.where(address_type: @address.address_type).count == 0
+      @address.default = true
+    end
+    
     if @address.save
       redirect_to edit_user_registration_path, notice: 'Address was successfully added.'
     else
@@ -46,7 +51,8 @@ class AddressesController < ApplicationController
   def address_params
     params.require(:address).permit(
       :first_name, :last_name, :address_line_1, :address_line_2,
-      :city, :province_id, :postal_code, :country, :phone
+      :city, :province_id, :postal_code, :country, :phone,
+      :address_type, :default
     )
   end
 end 

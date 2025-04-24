@@ -32,6 +32,10 @@ module CartManager
     session[:cart] = current_cart
   end
 
+  def clear_cart
+    session[:cart] = []
+  end
+
   def cart_total
     return 0 if current_cart.empty?
     

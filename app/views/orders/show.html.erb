@@ -1,23 +1,69 @@
 <div class="container mx-auto px-4 py-8">
-  <h1 class="text-2xl font-bold mb-4">Complete Your Order</h1>
+  <div class="bg-white rounded-lg shadow-lg p-6">
+    <h1 class="text-2xl font-bold mb-6">Order #<%= @order.id %></h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div>
+        <h2 class="text-lg font-semibold mb-4">Order Details</h2>
+        <div class="space-y-2">
+          <p><span class="font-medium">Order Date:</span> <%= @order.created_at.strftime("%B %d, %Y") %></p>
+          <p><span class="font-medium">Status:</span> <span class="<%= @order.status == 'completed' ? 'text-green-600' : 'text-yellow-600' %>"><%= @order.status.titleize %></span></p>
+          <p><span class="font-medium">Total Amount:</span> <%= number_to_currency(@order.total) %></p>
+        </div>
+      </div>
 
-  <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-    <div class="mb-4">
-      <h2 class="text-xl font-semibold mb-2">Order Summary</h2>
-      <p>Total: $<%= @order.total %></p>
+      <div>
+        <h2 class="text-lg font-semibold mb-4">Shipping Address</h2>
+        <div class="space-y-2">
+          <p><%= @order.shipping_address.full_name %></p>
+          <p><%= @order.shipping_address.address_line_1 %></p>
+          <% if @order.shipping_address.address_line_2.present? %>
+            <p><%= @order.shipping_address.address_line_2 %></p>
+          <% end %>
+          <p><%= @order.shipping_address.city %>, <%= @order.shipping_address.province.code %> <%= @order.shipping_address.postal_code %></p>
+          <p><%= @order.shipping_address.country %></p>
+        </div>
+      </div>
     </div>
 
-    <div class="mb-4">
-      <h2 class="text-xl font-semibold mb-2">Payment Details</h2>
-      <form id="payment-form">
-        <div id="payment-element" class="mb-4">
-          <!-- Stripe Elements will insert the payment form here -->
+    <h2 class="text-lg font-semibold mb-4">Order Items</h2>
+    <div class="space-y-4">
+      <% @order_items.each do |item| %>
+        <div class="flex items-center border-b pb-4">
+          <div class="w-20 h-20 flex-shrink-0">
+            <div class="w-full h-full bg-gray-200 rounded flex items-center justify-center">
+              <span class="text-gray-400">No image</span>
+            </div>
+          </div>
+          <div class="ml-4 flex-grow">
+            <h3 class="font-medium"><%= item.crate_type.name %></h3>
+            <p class="text-gray-600">Quantity: <%= item.quantity %></p>
+            <p class="text-gray-600">Price: <%= number_to_currency(item.price_cents / 100.0) %></p>
+          </div>
+          <div class="text-right">
+            <p class="font-medium"><%= number_to_currency((item.quantity * item.price_cents) / 100.0) %></p>
+          </div>
         </div>
-        <button id="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
-          Pay Now
-        </button>
-        <div id="error-message" class="text-red-500 mt-2"></div>
-      </form>
+      <% end %>
+    </div>
+
+    <div class="mt-6 border-t pt-4">
+      <div class="flex justify-between items-center">
+        <span class="font-medium">Subtotal:</span>
+        <span><%= number_to_currency(@order.subtotal_cents / 100.0) %></span>
+      </div>
+      <div class="flex justify-between items-center mt-2">
+        <span class="font-medium">Tax:</span>
+        <span><%= number_to_currency(@order.tax_cents / 100.0) %></span>
+      </div>
+      <div class="flex justify-between items-center mt-2">
+        <span class="font-medium">Shipping:</span>
+        <span><%= number_to_currency(@order.shipping_cents / 100.0) %></span>
+      </div>
+      <div class="flex justify-between items-center mt-4 pt-2 border-t">
+        <span class="font-bold">Total:</span>
+        <span class="font-bold"><%= number_to_currency(@order.total) %></span>
+      </div>
     </div>
   </div>
 </div>

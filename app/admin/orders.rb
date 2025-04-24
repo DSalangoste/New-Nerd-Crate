@@ -27,7 +27,7 @@ ActiveAdmin.register Order do
     column :user
     column :status
     column :total do |order|
-      number_to_currency(order.total_cents / 100.0)
+      number_to_currency((order.total_cents || 0) / 100.0)
     end
     column :created_at
     actions
@@ -45,7 +45,19 @@ ActiveAdmin.register Order do
       row :notes
       row :payment do |order|
         if order.payment
-          "#{order.payment.payment_method} - #{order.payment.transaction_id}"
+          status_color = case order.payment.status
+          when 'completed' then 'green'
+          when 'failed' then 'red'
+          when 'refunded' then 'orange'
+          else 'gray'
+          end
+          span class: "status_tag #{status_color}" do
+            "#{order.payment.payment_method} - #{order.payment.transaction_id} (#{order.payment.status})"
+          end
+        else
+          span class: "status_tag red" do
+            "No payment"
+          end
         end
       end
     end
@@ -55,10 +67,10 @@ ActiveAdmin.register Order do
         column :crate_type
         column :quantity
         column :price do |item|
-          number_to_currency(item.price_cents / 100.0)
+          number_to_currency((item.price_cents || 0) / 100.0)
         end
         column :total do |item|
-          number_to_currency(item.total_cents / 100.0)
+          number_to_currency((item.total_cents || 0) / 100.0)
         end
       end
     end
@@ -66,16 +78,16 @@ ActiveAdmin.register Order do
     panel "Order Totals" do
       attributes_table_for order do
         row :subtotal do
-          number_to_currency(order.subtotal_cents / 100.0)
+          number_to_currency((order.subtotal_cents || 0) / 100.0)
         end
         row :tax do
-          number_to_currency(order.tax_cents / 100.0)
+          number_to_currency((order.tax_cents || 0) / 100.0)
         end
         row :shipping do
-          number_to_currency(order.shipping_cents / 100.0)
+          number_to_currency((order.shipping_cents || 0) / 100.0)
         end
         row :total do
-          number_to_currency(order.total_cents / 100.0)
+          number_to_currency((order.total_cents || 0) / 100.0)
         end
       end
     end

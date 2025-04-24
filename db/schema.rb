@@ -133,7 +133,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_21_235328) do
 
   create_table "orders", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.bigint "crate_type_id"
     t.string "status", default: "cart"
     t.decimal "total_price"
     t.datetime "created_at", null: false
@@ -152,7 +151,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_21_235328) do
     t.string "shipping_method"
     t.text "notes"
     t.datetime "completed_at"
-    t.index ["crate_type_id"], name: "index_orders_on_crate_type_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
@@ -163,6 +161,20 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_21_235328) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_pages_on_slug", unique: true
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.string "payment_method"
+    t.string "transaction_id"
+    t.string "status"
+    t.integer "amount_cents"
+    t.string "currency", default: "USD"
+    t.datetime "processed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_payments_on_order_id"
+    t.index ["transaction_id"], name: "index_payments_on_transaction_id", unique: true
   end
 
   create_table "provinces", force: :cascade do |t|
@@ -203,6 +215,6 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_21_235328) do
   add_foreign_key "order_items", "orders"
   add_foreign_key "ordered_crates", "crate_types"
   add_foreign_key "ordered_crates", "orders"
-  add_foreign_key "orders", "crate_types"
   add_foreign_key "orders", "users"
+  add_foreign_key "payments", "orders"
 end
