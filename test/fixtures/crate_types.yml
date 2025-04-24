@@ -1,11 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  description: MyText
-  price: 9.99
+  name: "Gaming Crate"
+  description: "A crate filled with gaming goodies"
+  price: 49.99
+  active: true
 
 two:
-  name: MyString
-  description: MyText
-  price: 9.99
+  name: "Anime Crate"
+  description: "Anime merchandise and collectibles"
+  price: 39.99
+  active: true

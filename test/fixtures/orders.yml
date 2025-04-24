@@ -3,8 +3,11 @@
 one:
   user: one
   crate_type: one
-  status: MyString
+  status: pending
   total_price: 9.99
+  shipping_method: standard
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>
 
 two:
   user: two

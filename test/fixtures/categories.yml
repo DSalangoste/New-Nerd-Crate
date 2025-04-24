@@ -1,9 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  description: MyText
+  name: "Gaming"
+  description: "Video games and gaming accessories"
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>
 
 two:
-  name: MyString
-  description: MyText
+  name: "Anime"
+  description: "Anime merchandise and collectibles"
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>

@@ -6,3 +6,21 @@ $primary-color: #2d3748;
 @import "active_admin/base";
 
 // Your custom ActiveAdmin styles can go here 
+
+// Image preview styles
+.image-upload-container {
+  margin-bottom: 20px;
+  
+  img[data-image-preview-target="preview"] {
+    max-width: 200px;
+    max-height: 200px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+  }
+  
+  .hidden {
+    display: none;
+  }
+} 
