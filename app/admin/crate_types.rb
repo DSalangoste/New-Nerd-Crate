@@ -11,7 +11,7 @@ ActiveAdmin.register CrateType do
     end
     column :image do |crate|
       if crate.image.attached?
-        image_tag url_for(crate.image.variant(resize_to_limit: [100, 100]))
+        image_tag url_for(crate.thumbnail)
       else
         "No image"
       end
@@ -45,14 +45,14 @@ ActiveAdmin.register CrateType do
                   }
                 },
                 hint: f.object.image.attached? ? 
-                  image_tag(url_for(f.object.image.variant(resize_to_limit: [200, 200])), 
+                  image_tag(url_for(f.object.medium), 
                            data: { image_preview_target: "preview" }) : 
                   "No image uploaded"
         
         # Preview container
         div class: "mt-2" do
           if f.object.image.attached?
-            image_tag url_for(f.object.image.variant(resize_to_limit: [200, 200])), 
+            image_tag url_for(f.object.medium), 
                       class: "hidden", 
                       data: { image_preview_target: "preview" }
           else
@@ -73,7 +73,7 @@ ActiveAdmin.register CrateType do
       end
       row :image do |crate|
         if crate.image.attached?
-          image_tag url_for(crate.image.variant(resize_to_limit: [300, 300]))
+          image_tag url_for(crate.large)
         else
           "No image"
         end

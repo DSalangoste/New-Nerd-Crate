@@ -41,6 +41,19 @@ class CrateType < ApplicationRecord
     ["categories", "orders", "ordered_crates"]
   end
 
+  # Image variant methods
+  def thumbnail
+    image.variant(resize_to_limit: [100, 100]).processed
+  end
+
+  def medium
+    image.variant(resize_to_limit: [300, 300]).processed
+  end
+
+  def large
+    image.variant(resize_to_limit: [800, 800]).processed
+  end
+
   private
 
   def acceptable_image

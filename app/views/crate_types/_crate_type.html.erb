@@ -1,22 +1,23 @@
-<div class="bg-white rounded-lg shadow-md overflow-hidden">
+<div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
   <div class="aspect-w-16 aspect-h-9">
     <% if crate_type.image.attached? %>
-      <%= image_tag url_for(crate_type.image.variant(resize_to_limit: [400, 300])), 
+      <%= image_tag url_for(crate_type.thumbnail), 
                     class: "w-full h-full object-cover",
                     alt: crate_type.name %>
     <% else %>
-      <div class="w-full h-full bg-gray-200 flex items-center justify-center">
-        <span class="text-gray-400">No image available</span>
+      <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+        <span class="text-gray-400 text-sm">No image available</span>
       </div>
     <% end %>
   </div>
   
   <div class="p-4">
-    <h3 class="text-lg font-semibold text-gray-900"><%= crate_type.name %></h3>
-    <p class="mt-1 text-sm text-gray-500"><%= truncate(crate_type.description, length: 100) %></p>
-    <div class="mt-2 flex items-center justify-between">
-      <span class="text-lg font-bold text-gray-900"><%= number_to_currency(crate_type.price) %></span>
-      <%= link_to "View Details", crate_type_path(crate_type), class: "text-indigo-600 hover:text-indigo-900" %>
+    <h3 class="text-lg font-semibold text-gray-900 mb-2"><%= crate_type.name %></h3>
+    <p class="text-sm text-gray-500 mb-3"><%= truncate(crate_type.description, length: 100) %></p>
+    <div class="flex items-center justify-between">
+      <span class="text-lg font-bold text-indigo-600"><%= number_to_currency(crate_type.price) %></span>
+      <%= link_to "View Details", crate_type_path(crate_type), 
+          class: "text-indigo-600 hover:text-indigo-800 font-medium text-sm" %>
     </div>
   </div>
 </div> 

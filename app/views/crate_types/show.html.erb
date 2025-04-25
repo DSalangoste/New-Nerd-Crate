@@ -1,32 +1,55 @@
-<div class="container mx-auto px-4 py-8">
-  <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+<div class="container mx-auto px-4 py-12">
+  <div class="bg-white rounded-xl shadow-xl overflow-hidden">
     <div class="md:flex">
-      <div class="md:flex-shrink-0">
+      <div class="md:flex-shrink-0 md:w-1/2">
         <% if @crate_type.image.attached? %>
-          <%= image_tag url_for(@crate_type.image.variant(resize_to_limit: [600, 400])), 
-                        class: "h-48 w-full object-cover md:w-96",
-                        alt: @crate_type.name %>
+          <div class="relative h-64 md:h-full">
+            <%= image_tag url_for(@crate_type.medium), 
+                          class: "w-full h-full object-cover",
+                          alt: @crate_type.name %>
+          </div>
         <% else %>
-          <div class="h-48 w-full bg-gray-200 flex items-center justify-center md:w-96">
-            <span class="text-gray-400">No image available</span>
+          <div class="h-64 md:h-full bg-gray-100 flex items-center justify-center">
+            <span class="text-gray-400 text-lg">No image available</span>
           </div>
         <% end %>
       </div>
       
-      <div class="p-8">
-        <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
-          <%= @crate_type.categories.map(&:name).join(", ") %>
-        </div>
-        <h1 class="mt-2 text-3xl font-bold text-gray-900"><%= @crate_type.name %></h1>
-        <p class="mt-4 text-gray-500"><%= @crate_type.description %></p>
-        <div class="mt-6">
-          <span class="text-3xl font-bold text-gray-900"><%= number_to_currency(@crate_type.price) %></span>
-        </div>
-        <div class="mt-6">
-          <%= button_to "Add to Cart", add_cart_path(crate_type_id: @crate_type.id), 
-              class: "w-full bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" %>
+      <div class="p-8 md:p-12 md:w-1/2">
+        <div class="flex flex-col h-full">
+          <div class="mb-4">
+            <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
+              <%= @crate_type.categories.map(&:name).join(", ") %>
+            </div>
+          </div>
+          
+          <h1 class="text-4xl font-extrabold text-gray-900 mb-4"><%= @crate_type.name %></h1>
+          
+          <div class="mb-6">
+            <span class="text-4xl font-bold text-indigo-600"><%= number_to_currency(@crate_type.price) %></span>
+          </div>
+          
+          <div class="prose prose-lg text-gray-600 mb-8">
+            <p><%= @crate_type.description %></p>
+          </div>
+          
+          <div class="mt-auto">
+            <%= button_to add_cart_path(crate_type_id: @crate_type.id), 
+                class: "w-full bg-indigo-600 text-white px-6 py-4 rounded-lg text-lg font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-150 ease-in-out" do %>
+              <span class="flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                Add to Cart
+              </span>
+            <% end %>
+          </div>
         </div>
       </div>
     </div>
+  </div>
+  
+  <div class="mt-8 text-center">
+    <%= link_to "← Back to Homepage", root_path, class: "text-indigo-600 hover:text-indigo-800 font-medium" %>
   </div>
 </div> 
