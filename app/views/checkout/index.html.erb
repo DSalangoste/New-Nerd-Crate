@@ -1,93 +1,129 @@
-<div class="container mx-auto px-4 py-8">
-  <h1 class="text-2xl font-bold mb-6">Checkout</h1>
+<div class="container py-4">
+  <%= render 'shared/breadcrumbs' %>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8">
-      <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
-      
-      <div class="space-y-4">
-        <% @cart_items.each do |item| %>
-          <% crate_type = CrateType.find(item["crate_type_id"]) %>
-          <div class="flex justify-between items-center">
-            <div>
-              <p class="font-medium"><%= crate_type.name %></p>
-              <p class="text-gray-600">Quantity: <%= item["quantity"] %></p>
-            </div>
-            <p class="font-medium">
-              $<%= number_with_precision(crate_type.price * item["quantity"].to_i, precision: 2) %>
-            </p>
-          </div>
-        <% end %>
+  <h1 class="mb-4">Checkout</h1>
 
-        <div class="border-t pt-4 mt-4">
-          <div class="flex justify-between">
-            <p class="font-semibold">Total:</p>
-            <p class="font-semibold">
-              $<%= number_with_precision(@cart_items.sum { |item| CrateType.find(item["crate_type_id"]).price * item["quantity"].to_i }, precision: 2) %>
-            </p>
-          </div>
-        </div>
-      </div>
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <%= render 'shared/order_summary', cart_items: @cart_items %>
     </div>
 
-    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8">
-      <h2 class="text-xl font-semibold mb-4">Complete Order</h2>
-      
-      <%= form_tag checkout_index_path, method: :post, class: "space-y-4", data: { turbo: false }, id: "checkout-form" do %>
-        <div class="mb-4">
-          <label class="block text-gray-700 text-sm font-bold mb-2" for="shipping_method">
-            Shipping Method
-          </label>
-          <select name="shipping_method" id="shipping_method" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-            <option value="standard">Standard Shipping ($5)</option>
-            <option value="express">Express Shipping ($15)</option>
-          </select>
-        </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="h5 mb-4">Complete Order</h2>
+          
+          <%= form_tag checkout_index_path, method: :post, data: { turbo: false }, id: "checkout-form" do %>
+            <div class="mb-4">
+              <label class="form-label" for="shipping_method">Shipping Method</label>
+              <select name="shipping_method" id="shipping_method" class="form-select" required>
+                <option value="standard">Standard Shipping ($5)</option>
+                <option value="express">Express Shipping ($15)</option>
+              </select>
+            </div>
 
-        <div class="mb-4">
-          <h3 class="font-semibold mb-2">Shipping Address</h3>
-          <div class="space-y-2">
-            <input type="text" name="shipping_address[first_name]" value="<%= @default_shipping_address&.first_name %>" placeholder="First Name" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-            <input type="text" name="shipping_address[last_name]" value="<%= @default_shipping_address&.last_name %>" placeholder="Last Name" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-            <input type="text" name="shipping_address[address_line_1]" value="<%= @default_shipping_address&.address_line_1 %>" placeholder="Street Address" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-            <input type="text" name="shipping_address[city]" value="<%= @default_shipping_address&.city %>" placeholder="City" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-            <select name="shipping_address[state]" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-              <option value="">Select Province</option>
-              <% Province.all.each do |province| %>
-                <option value="<%= province.code %>" <%= 'selected' if @default_shipping_address&.province&.code == province.code %>><%= province.name %></option>
+            <!-- Shipping Address Section -->
+            <div class="mb-4">
+              <h3 class="h6 mb-3">Shipping Address</h3>
+              
+              <% if current_user.addresses.where(address_type: 'shipping').any? %>
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="shipping_address_option" 
+                           id="use_existing_shipping" value="existing" checked>
+                    <label class="form-check-label" for="use_existing_shipping">
+                      Use existing address
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="shipping_address_option" 
+                           id="use_new_shipping" value="new">
+                    <label class="form-check-label" for="use_new_shipping">
+                      Use a new address
+                    </label>
+                  </div>
+                </div>
+                
+                <div id="existing_shipping_address" class="mb-3">
+                  <select name="existing_shipping_address_id" class="form-select">
+                    <% current_user.addresses.where(address_type: 'shipping').each do |address| %>
+                      <option value="<%= address.id %>" 
+                              <%= 'selected' if address.default? %>>
+                        <%= address.full_name %> - <%= address.full_address %>
+                        <%= '(Default)' if address.default? %>
+                      </option>
+                    <% end %>
+                  </select>
+                  <input type="hidden" name="use_existing_shipping_address" id="use_existing_shipping_input" value="true">
+                </div>
+              <% else %>
+                <input type="hidden" name="use_existing_shipping_address" id="use_existing_shipping_input" value="false">
               <% end %>
-            </select>
-            <input type="text" name="shipping_address[postal_code]" value="<%= @default_shipping_address&.postal_code %>" placeholder="Postal Code" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-            <input type="tel" name="shipping_address[phone]" value="<%= @default_shipping_address&.phone %>" placeholder="Phone Number" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-          </div>
-        </div>
+              
+              <div id="new_shipping_address" class="<%= current_user.addresses.where(address_type: 'shipping').any? ? 'd-none' : '' %>">
+                <%= render 'shared/address_form', 
+                         title: 'Shipping', 
+                         prefix: 'shipping_address', 
+                         address: @default_shipping_address %>
+              </div>
+            </div>
 
-        <div class="mb-4">
-          <h3 class="font-semibold mb-2">Billing Address</h3>
-          <div class="space-y-2">
-            <input type="text" name="billing_address[first_name]" value="<%= @default_billing_address&.first_name %>" placeholder="First Name" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-            <input type="text" name="billing_address[last_name]" value="<%= @default_billing_address&.last_name %>" placeholder="Last Name" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-            <input type="text" name="billing_address[address_line_1]" value="<%= @default_billing_address&.address_line_1 %>" placeholder="Street Address" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-            <input type="text" name="billing_address[city]" value="<%= @default_billing_address&.city %>" placeholder="City" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-            <select name="billing_address[state]" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-              <option value="">Select Province</option>
-              <% Province.all.each do |province| %>
-                <option value="<%= province.code %>" <%= 'selected' if @default_billing_address&.province&.code == province.code %>><%= province.name %></option>
+            <!-- Billing Address Section -->
+            <div class="mb-4">
+              <h3 class="h6 mb-3">Billing Address</h3>
+              
+              <% if current_user.addresses.where(address_type: 'billing').any? %>
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="billing_address_option" 
+                           id="use_existing_billing" value="existing" checked>
+                    <label class="form-check-label" for="use_existing_billing">
+                      Use existing address
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="billing_address_option" 
+                           id="use_new_billing" value="new">
+                    <label class="form-check-label" for="use_new_billing">
+                      Use a new address
+                    </label>
+                  </div>
+                </div>
+                
+                <div id="existing_billing_address" class="mb-3">
+                  <select name="existing_billing_address_id" class="form-select">
+                    <% current_user.addresses.where(address_type: 'billing').each do |address| %>
+                      <option value="<%= address.id %>" 
+                              <%= 'selected' if address.default? %>>
+                        <%= address.full_name %> - <%= address.full_address %>
+                        <%= '(Default)' if address.default? %>
+                      </option>
+                    <% end %>
+                  </select>
+                  <input type="hidden" name="use_existing_billing_address" id="use_existing_billing_input" value="true">
+                </div>
+              <% else %>
+                <input type="hidden" name="use_existing_billing_address" id="use_existing_billing_input" value="false">
               <% end %>
-            </select>
-            <input type="text" name="billing_address[postal_code]" value="<%= @default_billing_address&.postal_code %>" placeholder="Postal Code" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-            <input type="tel" name="billing_address[phone]" value="<%= @default_billing_address&.phone %>" placeholder="Phone Number" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-          </div>
-        </div>
+              
+              <div id="new_billing_address" class="<%= current_user.addresses.where(address_type: 'billing').any? ? 'd-none' : '' %>">
+                <%= render 'shared/address_form', 
+                         title: 'Billing', 
+                         prefix: 'billing_address', 
+                         address: @default_billing_address %>
+              </div>
+            </div>
 
-        <div class="mb-6">
-          <p class="text-gray-600 mb-2">
-            By clicking "Place Order", you agree to our terms and conditions.
-          </p>
-        </div>
+            <div class="mb-4">
+              <p class="text-secondary">
+                By clicking "Place Order", you agree to our terms and conditions.
+              </p>
+            </div>
 
-        <%= submit_tag "Place Order", class: "w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200", id: "place-order-button" %>
-      <% end %>
+            <%= submit_tag "Place Order", class: "btn btn-primary w-100", id: "place-order-button" %>
+          <% end %>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -97,15 +133,59 @@
     const form = document.getElementById('checkout-form');
     const button = document.getElementById('place-order-button');
     
+    // Shipping address toggle
+    const useExistingShipping = document.getElementById('use_existing_shipping');
+    const useNewShipping = document.getElementById('use_new_shipping');
+    const existingShippingAddress = document.getElementById('existing_shipping_address');
+    const newShippingAddress = document.getElementById('new_shipping_address');
+    const useExistingShippingInput = document.getElementById('use_existing_shipping_input');
+    
+    if (useExistingShipping && useNewShipping) {
+      useExistingShipping.addEventListener('change', function() {
+        if (this.checked) {
+          existingShippingAddress.classList.remove('d-none');
+          newShippingAddress.classList.add('d-none');
+          useExistingShippingInput.value = 'true';
+        }
+      });
+      
+      useNewShipping.addEventListener('change', function() {
+        if (this.checked) {
+          existingShippingAddress.classList.add('d-none');
+          newShippingAddress.classList.remove('d-none');
+          useExistingShippingInput.value = 'false';
+        }
+      });
+    }
+    
+    // Billing address toggle
+    const useExistingBilling = document.getElementById('use_existing_billing');
+    const useNewBilling = document.getElementById('use_new_billing');
+    const existingBillingAddress = document.getElementById('existing_billing_address');
+    const newBillingAddress = document.getElementById('new_billing_address');
+    const useExistingBillingInput = document.getElementById('use_existing_billing_input');
+    
+    if (useExistingBilling && useNewBilling) {
+      useExistingBilling.addEventListener('change', function() {
+        if (this.checked) {
+          existingBillingAddress.classList.remove('d-none');
+          newBillingAddress.classList.add('d-none');
+          useExistingBillingInput.value = 'true';
+        }
+      });
+      
+      useNewBilling.addEventListener('change', function() {
+        if (this.checked) {
+          existingBillingAddress.classList.add('d-none');
+          newBillingAddress.classList.remove('d-none');
+          useExistingBillingInput.value = 'false';
+        }
+      });
+    }
+    
     form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      // Disable the button to prevent double submission
       button.disabled = true;
-      button.textContent = 'Processing...';
-      
-      // Submit the form
-      form.submit();
+      button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
     });
   });
 </script> 
