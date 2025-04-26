@@ -68,8 +68,8 @@
             <li class="nav-item">
               <%= link_to cart_path, class: "nav-link" do %>
                 <i class="bi bi-cart"></i> Cart
-                <% if current_cart&.items&.any? %>
-                  <span class="badge bg-primary"><%= current_cart.items.sum(:quantity) %></span>
+                <% if current_cart&.any? %>
+                  <span class="badge bg-primary"><%= current_cart.sum { |item| item["quantity"].to_i } %></span>
                 <% end %>
               <% end %>
             </li>
