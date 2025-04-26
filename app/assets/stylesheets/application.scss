@@ -1,128 +1,89 @@
 // Import variables first
 @import "variables";
 
-// Import Bootstrap with custom variables
-$primary: $primary-color;
-$secondary: $secondary-color;
-$success: $success-color;
-$info: $accent-color;
-$warning: $warning-color;
-$danger: $error-color;
-
-@import "bootstrap";
+// Import Bootstrap
+@import "bootstrap/scss/bootstrap";
 
 // Base styles
 body {
   font-family: $font-family-base;
-  color: $text-primary;
-  background-color: $background-light;
+  color: $text-color;
   line-height: 1.5;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: $font-family-heading;
-  font-weight: $font-weight-semibold;
-  color: $text-primary;
-  margin-bottom: $spacing-md;
+  background-color: $background-light;
 }
 
 // Typography
-.text-primary { color: $primary-color !important; }
-.text-secondary { color: $text-secondary !important; }
-.text-success { color: $success-color !important; }
-.text-warning { color: $warning-color !important; }
-.text-danger { color: $error-color !important; }
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-family-heading;
+  color: $heading-color;
+  font-weight: $font-weight-semibold;
+  margin-bottom: $spacing-md;
+}
 
 // Buttons
 .btn {
   font-weight: $font-weight-medium;
-  padding: $spacing-sm $spacing-lg;
-  border-radius: $border-radius-md;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $border-radius;
   transition: $transition-base;
-  
-  &:hover {
-    transform: translateY(-1px);
-    box-shadow: $shadow-md;
-  }
-  
+
   &-primary {
     background-color: $primary-color;
     border-color: $primary-color;
     
     &:hover {
-      background-color: darken($primary-color, 5%);
-      border-color: darken($primary-color, 5%);
+      background-color: darken($primary-color, 10%);
+      border-color: darken($primary-color, 10%);
     }
   }
-  
+
   &-secondary {
     background-color: $secondary-color;
     border-color: $secondary-color;
     
     &:hover {
-      background-color: darken($secondary-color, 5%);
-      border-color: darken($secondary-color, 5%);
+      background-color: darken($secondary-color, 10%);
+      border-color: darken($secondary-color, 10%);
     }
   }
 }
 
 // Cards
 .card {
-  border: none;
-  border-radius: $border-radius-lg;
-  box-shadow: $shadow-sm;
-  transition: $transition-base;
+  border-radius: $border-radius-md;
+  border: 1px solid $border-color;
+  box-shadow: $box-shadow;
   
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: $shadow-lg;
+  &-header {
+    background-color: $white;
+    border-bottom: 1px solid $border-color;
+    padding: $spacing-md;
   }
   
-  .card-title {
-    font-weight: $font-weight-semibold;
-    color: $text-primary;
-  }
-  
-  .card-text {
-    color: $text-secondary;
-  }
-  
-  .card-price {
-    font-size: $font-size-xl;
-    font-weight: $font-weight-bold;
-    color: $primary-color;
+  &-body {
+    padding: $spacing-md;
   }
 }
 
 // Navigation
 .navbar {
-  background-color: $background-dark;
-  padding: $spacing-md 0;
-  box-shadow: $shadow-md;
-  
-  .navbar-brand {
-    font-family: $font-family-heading;
-    font-weight: $font-weight-bold;
-    font-size: $font-size-xl;
-    color: white;
-  }
+  background-color: $white;
+  box-shadow: $box-shadow-sm;
   
   .nav-link {
-    color: rgba(white, 0.8);
+    color: $text-color;
     font-weight: $font-weight-medium;
-    padding: $spacing-sm $spacing-md;
-    transition: $transition-base;
     
     &:hover {
-      color: white;
+      color: $primary-color;
     }
   }
 }
 
 // Forms
 .form-control {
-  border-radius: $border-radius-md;
-  border: 1px solid $border-color;
+  border-color: $border-color;
+  border-radius: $border-radius;
   padding: $spacing-sm $spacing-md;
   
   &:focus {
@@ -130,6 +91,38 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
   }
 }
+
+// Alerts
+.alert {
+  border-radius: $border-radius;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+  
+  &-success {
+    background-color: lighten($success-color, 45%);
+    border-color: $success-color;
+    color: darken($success-color, 10%);
+  }
+  
+  &-danger {
+    background-color: lighten($error-color, 45%);
+    border-color: $error-color;
+    color: darken($error-color, 10%);
+  }
+}
+
+// Utility classes
+.text-primary { color: $primary-color !important; }
+.text-secondary { color: $secondary-color !important; }
+.text-success { color: $success-color !important; }
+.text-warning { color: $warning-color !important; }
+.text-error { color: $error-color !important; }
+
+.bg-primary { background-color: $primary-color !important; }
+.bg-secondary { background-color: $secondary-color !important; }
+.bg-success { background-color: $success-color !important; }
+.bg-warning { background-color: $warning-color !important; }
+.bg-error { background-color: $error-color !important; }
 
 // Product Grid
 .product-grid {
