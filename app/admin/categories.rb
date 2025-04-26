@@ -35,4 +35,16 @@ ActiveAdmin.register Category do
     end
     f.actions
   end
+
+  controller do
+    def destroy
+      @category = Category.find(params[:id])
+      if @category.destroy
+        flash[:notice] = "Category successfully deleted"
+      else
+        flash[:error] = "Could not delete category"
+      end
+      redirect_to admin_categories_path
+    end
+  end
 end 
