@@ -2,33 +2,63 @@
 categories = {
   'Gaming' => {
     description: 'Video games, gaming accessories, and gaming culture items',
-    crate_types: ['Gaming Crate']
+    crate_types: ['Gaming Crate - Small', 'Gaming Crate - Medium', 'Gaming Crate - Large']
   },
   'Anime' => {
     description: 'Anime merchandise, figures, and collectibles',
-    crate_types: ['Anime Crate']
+    crate_types: ['Anime Crate - Small', 'Anime Crate - Medium', 'Anime Crate - Large']
   },
   'Comics' => {
     description: 'Comic books, graphic novels, and superhero merchandise',
-    crate_types: ['Comic Crate']
+    crate_types: ['Comic Crate - Small', 'Comic Crate - Medium', 'Comic Crate - Large']
   }
 }
 
 # Create crate types
 crate_types = {
-  'Gaming Crate' => {
-    price: 49.99,
-    description: 'Monthly gaming goodies and collectibles',
+  'Gaming Crate - Small' => {
+    price: 30.00,
+    description: 'Monthly gaming goodies and collectibles (Small)',
     category_name: 'Gaming'
   },
-  'Anime Crate' => {
-    price: 59.99,
-    description: 'Anime merchandise and collectibles',
+  'Gaming Crate - Medium' => {
+    price: 50.00,
+    description: 'Monthly gaming goodies and collectibles (Medium)',
+    category_name: 'Gaming'
+  },
+  'Gaming Crate - Large' => {
+    price: 100.00,
+    description: 'Monthly gaming goodies and collectibles (Large)',
+    category_name: 'Gaming'
+  },
+  'Anime Crate - Small' => {
+    price: 30.00,
+    description: 'Anime merchandise and collectibles (Small)',
     category_name: 'Anime'
   },
-  'Comic Crate' => {
-    price: 54.99,
-    description: 'Comic books and superhero merchandise',
+  'Anime Crate - Medium' => {
+    price: 50.00,
+    description: 'Anime merchandise and collectibles (Medium)',
+    category_name: 'Anime'
+  },
+  'Anime Crate - Large' => {
+    price: 100.00,
+    description: 'Anime merchandise and collectibles (Large)',
+    category_name: 'Anime'
+  },
+  'Comic Crate - Small' => {
+    price: 30.00,
+    description: 'Comic books and superhero merchandise (Small)',
+    category_name: 'Comics'
+  },
+  'Comic Crate - Medium' => {
+    price: 50.00,
+    description: 'Comic books and superhero merchandise (Medium)',
+    category_name: 'Comics'
+  },
+  'Comic Crate - Large' => {
+    price: 100.00,
+    description: 'Comic books and superhero merchandise (Large)',
     category_name: 'Comics'
   }
 }
