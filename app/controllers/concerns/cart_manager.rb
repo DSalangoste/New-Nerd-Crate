@@ -39,9 +39,13 @@ module CartManager
   def cart_total
     return 0 if current_cart.empty?
     
-    current_cart.sum do |item|
+    # Calculate total in cents to match order calculation
+    total_cents = current_cart.sum do |item|
       crate_type = CrateType.find(item["crate_type_id"].to_i)
-      crate_type.price * item["quantity"].to_i
+      (crate_type.price * 100 * item["quantity"].to_i).to_i
     end
+    
+    # Convert back to dollars for display
+    total_cents / 100.0
   end
 end 

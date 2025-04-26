@@ -51,7 +51,7 @@ class CrateType < ApplicationRecord
   end
 
   def large
-    image.variant(resize_to_limit: [800, 800]).processed
+    image.variant(resize_to_limit: [600, 600]).processed
   end
 
   private

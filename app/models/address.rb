@@ -11,7 +11,11 @@ class Address < ApplicationRecord
   validates :country, presence: true
   validates :phone, presence: true
   validates :province_id, presence: true
-
+  validates :address_type, presence: true, inclusion: { in: %w[shipping billing] }
+  
+  # Prevent duplicate addresses of the same type for a user
+  validate :no_duplicate_address_type, on: :create
+  
   before_save :ensure_single_default
 
   def full_name
@@ -37,5 +41,18 @@ class Address < ApplicationRecord
         .where(address_type: address_type, default: true)
         .where.not(id: id)
         .update_all(default: false)
+  end
+  
+  def no_duplicate_address_type
+    return unless user_id.present? && address_type.present?
+    
+    existing_address = user.addresses
+                         .where(address_type: address_type)
+                         .where.not(id: id)
+                         .first
+                         
+    if existing_address
+      errors.add(:address_type, "you already have a #{address_type} address")
+    end
   end
 end 

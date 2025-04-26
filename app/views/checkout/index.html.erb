@@ -22,29 +22,31 @@
               </select>
             </div>
 
-            <!-- Shipping Address Section -->
-            <div class="mb-4">
+            <%# Shipping Address Section %>
+            <div class="mb-4" data-controller="addresses">
               <h3 class="h6 mb-3">Shipping Address</h3>
               
               <% if current_user.addresses.where(address_type: 'shipping').any? %>
                 <div class="mb-3">
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="shipping_address_option" 
-                           id="use_existing_shipping" value="existing" checked>
+                           id="use_existing_shipping" value="existing" checked
+                           data-action="addresses#toggle">
                     <label class="form-check-label" for="use_existing_shipping">
                       Use existing address
                     </label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="shipping_address_option" 
-                           id="use_new_shipping" value="new">
+                           id="use_new_shipping" value="new"
+                           data-action="addresses#toggle">
                     <label class="form-check-label" for="use_new_shipping">
                       Use a new address
                     </label>
                   </div>
                 </div>
                 
-                <div id="existing_shipping_address" class="mb-3">
+                <div id="existing_shipping_address" class="mb-3" data-addresses-target="existingForm">
                   <select name="existing_shipping_address_id" class="form-select">
                     <% current_user.addresses.where(address_type: 'shipping').each do |address| %>
                       <option value="<%= address.id %>" 
@@ -54,43 +56,51 @@
                       </option>
                     <% end %>
                   </select>
-                  <input type="hidden" name="use_existing_shipping_address" id="use_existing_shipping_input" value="true">
+                  <input type="hidden" name="use_existing_shipping_address" 
+                         id="use_existing_shipping_input" value="true"
+                         data-addresses-target="existingInput">
                 </div>
               <% else %>
-                <input type="hidden" name="use_existing_shipping_address" id="use_existing_shipping_input" value="false">
+                <input type="hidden" name="use_existing_shipping_address" 
+                       id="use_existing_shipping_input" value="false"
+                       data-addresses-target="existingInput">
               <% end %>
               
-              <div id="new_shipping_address" class="<%= current_user.addresses.where(address_type: 'shipping').any? ? 'd-none' : '' %>">
+              <div id="new_shipping_address" 
+                   class="<%= current_user.addresses.where(address_type: 'shipping').any? ? 'd-none' : '' %>"
+                   data-addresses-target="newForm">
                 <%= render 'shared/address_form', 
-                         title: 'Shipping', 
-                         prefix: 'shipping_address', 
-                         address: @default_shipping_address %>
+                           title: 'Shipping', 
+                           prefix: 'shipping_address', 
+                           address: @default_shipping_address %>
               </div>
             </div>
 
-            <!-- Billing Address Section -->
-            <div class="mb-4">
+            <%# Billing Address Section %>
+            <div class="mb-4" data-controller="addresses">
               <h3 class="h6 mb-3">Billing Address</h3>
               
               <% if current_user.addresses.where(address_type: 'billing').any? %>
                 <div class="mb-3">
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="billing_address_option" 
-                           id="use_existing_billing" value="existing" checked>
+                           id="use_existing_billing" value="existing" checked
+                           data-action="addresses#toggle">
                     <label class="form-check-label" for="use_existing_billing">
                       Use existing address
                     </label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="billing_address_option" 
-                           id="use_new_billing" value="new">
+                           id="use_new_billing" value="new"
+                           data-action="addresses#toggle">
                     <label class="form-check-label" for="use_new_billing">
                       Use a new address
                     </label>
                   </div>
                 </div>
                 
-                <div id="existing_billing_address" class="mb-3">
+                <div id="existing_billing_address" class="mb-3" data-addresses-target="existingForm">
                   <select name="existing_billing_address_id" class="form-select">
                     <% current_user.addresses.where(address_type: 'billing').each do |address| %>
                       <option value="<%= address.id %>" 
@@ -100,17 +110,23 @@
                       </option>
                     <% end %>
                   </select>
-                  <input type="hidden" name="use_existing_billing_address" id="use_existing_billing_input" value="true">
+                  <input type="hidden" name="use_existing_billing_address" 
+                         id="use_existing_billing_input" value="true"
+                         data-addresses-target="existingInput">
                 </div>
               <% else %>
-                <input type="hidden" name="use_existing_billing_address" id="use_existing_billing_input" value="false">
+                <input type="hidden" name="use_existing_billing_address" 
+                       id="use_existing_billing_input" value="false"
+                       data-addresses-target="existingInput">
               <% end %>
               
-              <div id="new_billing_address" class="<%= current_user.addresses.where(address_type: 'billing').any? ? 'd-none' : '' %>">
+              <div id="new_billing_address" 
+                   class="<%= current_user.addresses.where(address_type: 'billing').any? ? 'd-none' : '' %>"
+                   data-addresses-target="newForm">
                 <%= render 'shared/address_form', 
-                         title: 'Billing', 
-                         prefix: 'billing_address', 
-                         address: @default_billing_address %>
+                           title: 'Billing', 
+                           prefix: 'billing_address', 
+                           address: @default_billing_address %>
               </div>
             </div>
 

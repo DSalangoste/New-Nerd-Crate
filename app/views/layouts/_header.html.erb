@@ -5,11 +5,11 @@
     
     <!-- Navigation -->
     <nav class="navbar-nav me-auto mb-0">
-      <%= link_to "Home", root_path, class: "nav-link" %>
-      <%= link_to "Categories", categories_path, class: "nav-link" %>
-      <%= link_to "About", about_path, class: "nav-link" %>
-      <%= link_to "Contact", contact_path, class: "nav-link" %>
-      <%= link_to cart_path, class: "nav-link d-flex align-items-center" do %>
+      <%= link_to "Home", root_path, class: "nav-link text-light" %>
+      <%= link_to "Categories", categories_path, class: "nav-link text-light" %>
+      <%= link_to "About", about_path, class: "nav-link text-light" %>
+      <%= link_to "Contact", contact_path, class: "nav-link text-light" %>
+      <%= link_to cart_path, class: "nav-link text-light d-flex align-items-center" do %>
         Shopping Cart
         <% if current_cart.any? %>
           <span class="badge bg-danger rounded-pill ms-2">
@@ -18,8 +18,8 @@
         <% end %>
       <% end %>
       <% if user_signed_in? %>
-        <%= link_to "My Account", edit_user_registration_path, class: "nav-link" %>
-        <%= link_to "My Orders", orders_path, class: "nav-link" %>
+        <%= link_to "My Account", edit_user_registration_path, class: "nav-link text-light" %>
+        <%= link_to "My Orders", orders_path, class: "nav-link text-light" %>
       <% end %>
       <% if admin_user_signed_in? %>
         <%= link_to "Admin Panel", admin_root_path, class: "nav-link text-warning" %>

@@ -1,30 +1,102 @@
 <%# Order summary partial %>
-<div class="card">
-  <div class="card-body">
-    <h2 class="h5 mb-4">Order Summary</h2>
-    
-    <div class="mb-4">
-      <% cart_items.each do |item| %>
-        <% crate_type = CrateType.find(item["crate_type_id"]) %>
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div>
-            <p class="mb-0 fw-medium"><%= crate_type.name %></p>
-            <p class="text-secondary mb-0">Quantity: <%= item["quantity"] %></p>
-          </div>
-          <p class="mb-0 fw-medium">
-            <%= number_to_currency(crate_type.price * item["quantity"].to_i) %>
-          </p>
-        </div>
-      <% end %>
+<%# Calculate subtotal in cents to match order calculation %>
+<% subtotal_cents = current_cart.sum do |item|
+  crate_type = CrateType.find(item["crate_type_id"].to_i)
+  (crate_type.price * 100 * item["quantity"].to_i).to_i
+end %>
 
-      <div class="border-top pt-3 mt-3">
-        <div class="d-flex justify-content-between">
-          <p class="fw-semibold mb-0">Total:</p>
-          <p class="fw-semibold mb-0">
-            <%= number_to_currency(cart_items.sum { |item| CrateType.find(item["crate_type_id"]).price * item["quantity"].to_i }) %>
-          </p>
-        </div>
-      </div>
+<%# Get shipping address and province %>
+<% if user_signed_in? %>
+  <%# Try to get default shipping address first %>
+  <% shipping_address = current_user.addresses.find_by(address_type: 'shipping', default: true) %>
+  <%# If no default, get any shipping address %>
+  <% shipping_address ||= current_user.addresses.find_by(address_type: 'shipping') %>
+  <% province = shipping_address&.province %>
+<% else %>
+  <% shipping_address = nil %>
+  <% province = nil %>
+<% end %>
+
+<%# Get tax rate from province or use default %>
+<% tax_rate = if province&.tax_rate.present?
+  # Ensure tax_rate is a decimal (e.g., 0.15 for 15%)
+  rate = province.tax_rate
+  if rate > 1
+    rate = rate / 100.0
+  end
+  rate
+else
+  # Default to 10% if no province or tax rate
+  0.1
+end %>
+
+<%# Calculate tax in cents %>
+<% tax_cents = (subtotal_cents * tax_rate).round %>
+
+<%# Set shipping cost in cents %>
+<% shipping_cents = case 'standard'
+  when 'express'
+    1500 # $15 for express
+  else
+    500  # $5 for standard
+  end %>
+
+<%# Calculate total in cents %>
+<% total_cents = subtotal_cents + tax_cents + shipping_cents %>
+
+<%# Convert all amounts to dollars for display %>
+<% subtotal = subtotal_cents / 100.0 %>
+<% tax = tax_cents / 100.0 %>
+<% shipping = shipping_cents / 100.0 %>
+<% total = total_cents / 100.0 %>
+
+<%# Debug information %>
+<% if Rails.env.development? %>
+  <div class="card mb-3">
+    <div class="card-header">
+      <h6 class="mb-0">Debug Info</h6>
     </div>
+    <div class="card-body">
+      <p>User Signed In: <%= user_signed_in? %></p>
+      <p>Shipping Address: <%= shipping_address&.inspect %></p>
+      <p>Province: <%= province&.inspect %></p>
+      <p>Tax Rate: <%= tax_rate %></p>
+      <p>Subtotal Cents: <%= subtotal_cents %></p>
+      <p>Tax Cents: <%= tax_cents %></p>
+      <p>Shipping Cents: <%= shipping_cents %></p>
+      <p>Total Cents: <%= total_cents %></p>
+    </div>
+  </div>
+<% end %>
+
+<div class="card">
+  <div class="card-header">
+    <h5 class="mb-0">Order Summary</h5>
+  </div>
+  <div class="card-body">
+    <div class="d-flex justify-content-between mb-2">
+      <span>Subtotal:</span>
+      <span><%= number_to_currency(subtotal) %></span>
+    </div>
+    <div class="d-flex justify-content-between mb-2">
+      <span>Tax:</span>
+      <span><%= number_to_currency(tax) %></span>
+    </div>
+    <div class="d-flex justify-content-between mb-2">
+      <span>Shipping:</span>
+      <span><%= number_to_currency(shipping) %></span>
+    </div>
+    <hr>
+    <div class="d-flex justify-content-between fw-bold">
+      <span>Total:</span>
+      <span><%= number_to_currency(total) %></span>
+    </div>
+    
+    <% if user_signed_in? && shipping_address.nil? %>
+      <div class="alert alert-warning mt-3">
+        <p class="mb-0">Please add a shipping address to get accurate tax calculations.</p>
+        <%= link_to "Add Address", new_address_path(address_type: 'shipping'), class: "btn btn-sm btn-warning mt-2" %>
+      </div>
+    <% end %>
   </div>
 </div> 

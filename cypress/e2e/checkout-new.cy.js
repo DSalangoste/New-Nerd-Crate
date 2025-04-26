@@ -27,8 +27,19 @@ describe('Checkout Flow - New Approach', () => {
 
   it('should complete checkout successfully', () => {
     // Add item to cart
-    cy.visit('/crate_types/3'); // Anime Crate Small
-    cy.get('button.btn.btn-primary.btn-lg').contains('Add to Cart').click();
+    cy.visit('/crate_types/23'); // All-in-one Crate
+    
+    // Debug: Log the page content to see what's actually there
+    cy.get('body').then($body => {
+      cy.log('Page content:', $body.html());
+    });
+    
+    // Try a more generic selector first
+    cy.get('button').contains('Add to Cart').should('exist').click();
+    
+    // Alternative approach if the above doesn't work
+    // cy.get('form').contains('Add to Cart').click();
+    
     cy.get('.alert-success').should('be.visible');
 
     // Go to cart

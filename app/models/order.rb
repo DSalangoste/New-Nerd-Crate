@@ -44,20 +44,26 @@ class Order < ApplicationRecord
       Rails.logger.debug "Item #{item.id}: quantity=#{quantity}, price=#{price}"
       quantity * price
     }
-    Rails.logger.debug "Calculated subtotal: #{subtotal_cents}"
+    Rails.logger.debug "Calculated subtotal: #{subtotal_cents} cents"
     
     # Calculate tax based on the province's tax rate
     tax_rate = if shipping_address&.province&.tax_rate.present?
-      shipping_address.province.tax_rate
+      # Ensure tax_rate is a decimal (e.g., 0.15 for 15%)
+      rate = shipping_address.province.tax_rate
+      if rate > 1
+        Rails.logger.warn "Tax rate for province #{shipping_address.province.code} is > 1, converting from percentage to decimal"
+        rate = rate / 100.0
+      end
+      rate
     else
       Rails.logger.warn "No province found for order #{id}, using default tax rate"
       0.1 # Default to 10% if no province
     end
-    Rails.logger.debug "Using tax rate: #{tax_rate}"
+    Rails.logger.debug "Using tax rate: #{tax_rate} (#{tax_rate * 100}%)"
     
-    # Calculate tax in cents (tax_rate is already a decimal, e.g. 0.15 for 15%)
+    # Calculate tax in cents
     self.tax_cents = (subtotal_cents * tax_rate).round
-    Rails.logger.debug "Calculated tax: #{tax_cents} (#{tax_rate * 100}% of #{subtotal_cents})"
+    Rails.logger.debug "Calculated tax: #{tax_cents} cents (#{tax_rate * 100}% of #{subtotal_cents} cents)"
     
     # Set shipping cost based on method
     self.shipping_cents = case shipping_method
@@ -69,11 +75,11 @@ class Order < ApplicationRecord
       Rails.logger.warn "Invalid shipping method '#{shipping_method}' for order #{id}, using standard"
       500  # Default to standard
     end
-    Rails.logger.debug "Set shipping cost: #{shipping_cents}"
+    Rails.logger.debug "Set shipping cost: #{shipping_cents} cents"
     
     # Calculate total
     self.total_cents = subtotal_cents + tax_cents + shipping_cents
-    Rails.logger.debug "Calculated total: #{total_cents}"
+    Rails.logger.debug "Calculated total: #{total_cents} cents"
     
     # Ensure all monetary values are valid
     [subtotal_cents, tax_cents, shipping_cents, total_cents].each do |value|
