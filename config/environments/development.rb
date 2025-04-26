@@ -45,6 +45,8 @@ Rails.application.configure do
   config.assets.compile = true
   config.assets.enabled = true
   config.assets.version = '1.0'
+  config.assets.digest = true
+  config.assets.check_precompiled_asset = false
   
   # Suppress logger output for asset requests.
   config.assets.quiet = true
