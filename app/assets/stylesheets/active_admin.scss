@@ -2,7 +2,8 @@
 $primary-color: #2d3748;
 
 // Active Admin styles
-@import "activeadmin/base";
+@import "active_admin/mixins";
+@import "active_admin/base";
 
 // Custom styles for image previews
 .image-upload-container {
