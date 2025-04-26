@@ -31,7 +31,52 @@
   </head>
 
   <body class="bg-gray-100">
-    <%= render 'layouts/header' %>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <%= link_to "NerdCrate", root_path, class: "navbar-brand" %>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <%= link_to "Home", root_path, class: "nav-link" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "Categories", categories_path, class: "nav-link" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "About", about_path, class: "nav-link" %>
+            </li>
+            <li class="nav-item">
+              <%= link_to "Contact", contact_path, class: "nav-link" %>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <% if admin_user_signed_in? %>
+              <li class="nav-item">
+                <%= link_to "Admin Dashboard", admin_root_path, class: "nav-link" %>
+              </li>
+              <li class="nav-item">
+                <%= button_to "Admin Logout", destroy_admin_user_session_path, method: :delete, class: "nav-link btn btn-link" %>
+              </li>
+            <% else %>
+              <li class="nav-item">
+                <%= link_to "Admin Login", new_admin_user_session_path, class: "nav-link" %>
+              </li>
+            <% end %>
+            <li class="nav-item">
+              <%= link_to cart_path, class: "nav-link" do %>
+                <i class="bi bi-cart"></i> Cart
+                <% if current_cart&.items&.any? %>
+                  <span class="badge bg-primary"><%= current_cart.items.sum(:quantity) %></span>
+                <% end %>
+              <% end %>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
     <main class="container py-4">
       <% if notice %>
