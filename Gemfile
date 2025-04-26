@@ -24,6 +24,7 @@ gem 'sass-rails', '~> 6.0'
 gem 'formtastic', '~> 5.0'
 gem 'inherited_resources'
 gem 'jquery-rails'
+gem 'bootstrap', '~> 5.3.0'
 
 # Asset Pipeline
 gem 'uglifier'
