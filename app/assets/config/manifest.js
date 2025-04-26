@@ -16,12 +16,4 @@
 //= link controllers/reviews_controller.js
 //= link controllers/wishlists_controller.js
 //= link controllers/notifications_controller.js
-//= link controllers/admin/dashboard_controller.js
-//= link controllers/admin/products_controller.js
-//= link controllers/admin/orders_controller.js
-//= link controllers/admin/users_controller.js
-//= link controllers/admin/categories_controller.js
-//= link controllers/admin/crate_types_controller.js
-//= link controllers/admin/reviews_controller.js
-//= link controllers/admin/notifications_controller.js
-//= link controllers/admin/settings_controller.js 
+//= link_tree ../../../javascript/controllers/admin .js 
