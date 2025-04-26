@@ -28,6 +28,7 @@ gem 'bootstrap', '~> 5.3.0'
 
 # Asset Pipeline
 gem 'uglifier'
+gem 'terser'
 gem 'sprockets-rails'
 
 # Pagination
