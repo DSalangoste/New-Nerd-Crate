@@ -77,6 +77,10 @@ crate_types = {
   }
 }
 
+# First, remove all existing categories and crate types to start fresh
+Category.destroy_all
+CrateType.destroy_all
+
 # Create categories first
 categories.each do |name, attributes|
   Category.find_or_create_by!(name: name) do |category|
