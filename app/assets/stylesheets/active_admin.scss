@@ -1,9 +1,9 @@
 // SASS variable overrides must be declared before loading Active Admin styles.
 $primary-color: #2d3748;
 
-// Active Admin's built-in CSS
-@import "activeadmin/base/mixins";
-@import "activeadmin/base/base";
+// Import Active Admin mixins first
+@import "active_admin/mixins";
+@import "active_admin/base";
 
 // Your custom ActiveAdmin styles can go here 
 
