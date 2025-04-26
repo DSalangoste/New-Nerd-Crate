@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_04_24_231757) do
+ActiveRecord::Schema[7.1].define(version: 2025_04_26_205558) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -94,6 +94,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_24_231757) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+
+    t.unique_constraint ["name"], name: "categories_name_key"
   end
 
   create_table "categories_crate_types", id: false, force: :cascade do |t|
@@ -107,6 +109,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_04_24_231757) do
     t.decimal "price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+
+    t.unique_constraint ["name"], name: "crate_types_name_key"
   end
 
   create_table "order_items", force: :cascade do |t|
