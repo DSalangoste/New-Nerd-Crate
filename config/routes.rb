@@ -28,7 +28,11 @@ Rails.application.routes.draw do
   end
 
   resources :checkout, only: [:index, :create]
-  resources :addresses, except: [:index, :show]
+  resources :addresses, except: [:index, :show] do
+    member do
+      patch :set_default
+    end
+  end
   resources :orders, only: [:index, :show] do
     resource :payment, only: [:create]
   end

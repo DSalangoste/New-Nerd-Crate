@@ -34,8 +34,23 @@ class AddressesController < ApplicationController
   end
 
   def destroy
+    # If this is the default address, make another address of the same type default
+    if @address.default?
+      new_default = current_user.addresses
+                              .where(address_type: @address.address_type)
+                              .where.not(id: @address.id)
+                              .first
+      new_default&.update(default: true)
+    end
+    
     @address.destroy
     redirect_to edit_user_registration_path, notice: 'Address was successfully removed.'
+  end
+
+  def set_default
+    @address = current_user.addresses.find(params[:id])
+    @address.update(default: true)
+    redirect_to edit_user_registration_path, notice: 'Default address updated.'
   end
 
   private

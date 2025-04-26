@@ -1,0 +1,63 @@
+<%# Address form partial %>
+<div class="mb-4">
+  <h3 class="h6 mb-3"><%= title %> Address</h3>
+  <div class="mb-3">
+    <input type="text" 
+           name="<%= prefix %>[first_name]" 
+           value="<%= address&.first_name %>" 
+           placeholder="First Name" 
+           class="form-control" 
+           required>
+  </div>
+  <div class="mb-3">
+    <input type="text" 
+           name="<%= prefix %>[last_name]" 
+           value="<%= address&.last_name %>" 
+           placeholder="Last Name" 
+           class="form-control" 
+           required>
+  </div>
+  <div class="mb-3">
+    <input type="text" 
+           name="<%= prefix %>[address_line_1]" 
+           value="<%= address&.address_line_1 %>" 
+           placeholder="Street Address" 
+           class="form-control" 
+           required>
+  </div>
+  <div class="mb-3">
+    <input type="text" 
+           name="<%= prefix %>[city]" 
+           value="<%= address&.city %>" 
+           placeholder="City" 
+           class="form-control" 
+           required>
+  </div>
+  <div class="mb-3">
+    <select name="<%= prefix %>[state]" class="form-select" required>
+      <option value="">Select Province</option>
+      <% Province.all.each do |province| %>
+        <option value="<%= province.code %>" 
+                <%= 'selected' if address&.province&.code == province.code %>>
+          <%= province.name %>
+        </option>
+      <% end %>
+    </select>
+  </div>
+  <div class="mb-3">
+    <input type="text" 
+           name="<%= prefix %>[postal_code]" 
+           value="<%= address&.postal_code %>" 
+           placeholder="Postal Code" 
+           class="form-control" 
+           required>
+  </div>
+  <div class="mb-3">
+    <input type="tel" 
+           name="<%= prefix %>[phone]" 
+           value="<%= address&.phone %>" 
+           placeholder="Phone Number" 
+           class="form-control" 
+           required>
+  </div>
+</div> 

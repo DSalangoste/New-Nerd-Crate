@@ -1,0 +1,65 @@
+<%# Breadcrumb navigation %>
+<nav aria-label="breadcrumb" class="mb-4">
+  <ol class="breadcrumb">
+    <%# Home is always first %>
+    <li class="breadcrumb-item">
+      <%= link_to "Home", root_path %>
+    </li>
+
+    <%# Dynamic breadcrumbs based on current page %>
+    <% if controller_name == 'categories' %>
+      <% if action_name == 'index' %>
+        <li class="breadcrumb-item active" aria-current="page">Categories</li>
+      <% elsif action_name == 'show' && @category %>
+        <li class="breadcrumb-item">
+          <%= link_to "Categories", categories_path %>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          <%= @category.name %>
+        </li>
+      <% end %>
+    <% end %>
+
+    <%# For crate types %>
+    <% if controller_name == 'crate_types' && action_name == 'show' && @crate_type %>
+      <li class="breadcrumb-item">
+        <%= link_to "Categories", categories_path %>
+      </li>
+      <% if @crate_type.categories.any? %>
+        <li class="breadcrumb-item">
+          <%= link_to @crate_type.categories.first.name, category_path(@crate_type.categories.first) %>
+        </li>
+      <% end %>
+      <li class="breadcrumb-item active" aria-current="page">
+        <%= @crate_type.name %>
+      </li>
+    <% end %>
+
+    <%# For cart %>
+    <% if controller_name == 'carts' && action_name == 'show' %>
+      <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+    <% end %>
+
+    <%# For checkout %>
+    <% if controller_name == 'checkout' %>
+      <li class="breadcrumb-item">
+        <%= link_to "Shopping Cart", cart_path %>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+    <% end %>
+
+    <%# For orders %>
+    <% if controller_name == 'orders' %>
+      <% if action_name == 'index' %>
+        <li class="breadcrumb-item active" aria-current="page">My Orders</li>
+      <% elsif action_name == 'show' && @order %>
+        <li class="breadcrumb-item">
+          <%= link_to "My Orders", orders_path %>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          Order #<%= @order.id %>
+        </li>
+      <% end %>
+    <% end %>
+  </ol>
+</nav> 

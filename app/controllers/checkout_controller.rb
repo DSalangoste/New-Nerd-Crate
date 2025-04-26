@@ -57,20 +57,22 @@ class CheckoutController < ApplicationController
         end
         Rails.logger.debug "Found shipping province: #{province.inspect}"
         
-        # Create shipping address
-        shipping_address = @order.create_shipping_address!(
-          user: current_user,
-          first_name: params[:shipping_address][:first_name],
-          last_name: params[:shipping_address][:last_name],
-          address_line_1: params[:shipping_address][:address_line_1],
-          city: params[:shipping_address][:city],
-          province: province,
-          postal_code: params[:shipping_address][:postal_code],
-          country: 'Canada',
-          phone: params[:shipping_address][:phone],
-          address_type: 'shipping'
-        )
-        Rails.logger.debug "Created shipping address: #{shipping_address.inspect}"
+        # Check if we're using an existing address
+        if params[:use_existing_shipping_address] == "true" && params[:existing_shipping_address_id].present?
+          existing_address = current_user.addresses.find_by(id: params[:existing_shipping_address_id])
+          if existing_address
+            # Associate the existing address with the order
+            existing_address.update(order: @order)
+            shipping_address = existing_address
+            Rails.logger.debug "Using existing shipping address: #{shipping_address.inspect}"
+          else
+            # Create new shipping address if existing one not found
+            shipping_address = create_shipping_address(province)
+          end
+        else
+          # Create new shipping address
+          shipping_address = create_shipping_address(province)
+        end
 
         # Find province by code for billing address
         billing_province = Province.find_by(code: params[:billing_address][:state])
@@ -80,20 +82,22 @@ class CheckoutController < ApplicationController
         end
         Rails.logger.debug "Found billing province: #{billing_province.inspect}"
         
-        # Create billing address
-        billing_address = @order.create_billing_address!(
-          user: current_user,
-          first_name: params[:billing_address][:first_name],
-          last_name: params[:billing_address][:last_name],
-          address_line_1: params[:billing_address][:address_line_1],
-          city: params[:billing_address][:city],
-          province: billing_province,
-          postal_code: params[:billing_address][:postal_code],
-          country: 'Canada',
-          phone: params[:billing_address][:phone],
-          address_type: 'billing'
-        )
-        Rails.logger.debug "Created billing address: #{billing_address.inspect}"
+        # Check if we're using an existing address
+        if params[:use_existing_billing_address] == "true" && params[:existing_billing_address_id].present?
+          existing_address = current_user.addresses.find_by(id: params[:existing_billing_address_id])
+          if existing_address
+            # Associate the existing address with the order
+            existing_address.update(order: @order)
+            billing_address = existing_address
+            Rails.logger.debug "Using existing billing address: #{billing_address.inspect}"
+          else
+            # Create new billing address if existing one not found
+            billing_address = create_billing_address(billing_province)
+          end
+        else
+          # Create new billing address
+          billing_address = create_billing_address(billing_province)
+        end
         
         # Create order items
         current_cart.each do |item|
@@ -167,5 +171,35 @@ class CheckoutController < ApplicationController
     
     Rails.logger.debug "Found shipping address: #{@default_shipping_address.inspect}"
     Rails.logger.debug "Found billing address: #{@default_billing_address.inspect}"
+  end
+
+  def create_shipping_address(province)
+    @order.create_shipping_address!(
+      user: current_user,
+      first_name: params[:shipping_address][:first_name],
+      last_name: params[:shipping_address][:last_name],
+      address_line_1: params[:shipping_address][:address_line_1],
+      city: params[:shipping_address][:city],
+      province: province,
+      postal_code: params[:shipping_address][:postal_code],
+      country: 'Canada',
+      phone: params[:shipping_address][:phone],
+      address_type: 'shipping'
+    )
+  end
+
+  def create_billing_address(province)
+    @order.create_billing_address!(
+      user: current_user,
+      first_name: params[:billing_address][:first_name],
+      last_name: params[:billing_address][:last_name],
+      address_line_1: params[:billing_address][:address_line_1],
+      city: params[:billing_address][:city],
+      province: province,
+      postal_code: params[:billing_address][:postal_code],
+      country: 'Canada',
+      phone: params[:billing_address][:phone],
+      address_type: 'billing'
+    )
   end
 end 

@@ -1,60 +1,45 @@
-<div class="container mx-auto px-4 py-8">
-  <h1 class="text-2xl font-bold mb-6">Shopping Cart</h1>
+<div class="container py-4">
+  <%= render 'shared/breadcrumbs' %>
+  
+  <h1 class="mb-4">Shopping Cart</h1>
 
-  <table class="w-full">
-    <thead>
-      <tr>
-        <th class="text-left">Product</th>
-        <th class="text-left">Quantity</th>
-        <th class="text-right">Price</th>
-        <th class="text-right">Total</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% if @cart_items.empty? %>
-        <tr>
-          <td colspan="5" class="text-center py-4">
-            <p class="text-lg mb-4">Your cart is empty</p>
-            <%= link_to "Browse Crates", root_path, class: "text-blue-600 hover:text-blue-800" %>
-          </td>
-        </tr>
-      <% else %>
-        <% @cart_items.each_with_index do |item, index| %>
-          <% crate_type = CrateType.find(item["crate_type_id"].to_i) %>
+  <div class="card">
+    <div class="card-body">
+      <table class="table">
+        <thead>
           <tr>
-            <td><%= crate_type.name %></td>
-            <td>
-              <%= form_tag update_quantity_cart_path, method: :patch do %>
-                <%= hidden_field_tag :index, index %>
-                <%= number_field_tag :quantity, item["quantity"], min: 1 %>
-                <%= submit_tag "Update" %>
-              <% end %>
-            </td>
-            <td class="text-right">$<%= number_with_precision(crate_type.price, precision: 2) %></td>
-            <td class="text-right">$<%= number_with_precision(crate_type.price * item["quantity"].to_i, precision: 2) %></td>
-            <td class="text-right">
-              <%= form_tag remove_cart_path, method: :delete do %>
-                <%= hidden_field_tag :index, index %>
-                <%= submit_tag "Remove" %>
-              <% end %>
-            </td>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th class="text-end">Price</th>
+            <th class="text-end">Total</th>
+            <th></th>
           </tr>
-        <% end %>
+        </thead>
+        <tbody>
+          <% if @cart_items.empty? %>
+            <tr>
+              <td colspan="5" class="text-center py-4">
+                <p class="mb-4">Your cart is empty</p>
+                <%= link_to "Browse Crates", root_path, class: "btn btn-primary" %>
+              </td>
+            </tr>
+          <% else %>
+            <% @cart_items.each_with_index do |item, index| %>
+              <% crate_type = CrateType.find(item["crate_type_id"].to_i) %>
+              <%= render 'cart_item', item: item, crate_type: crate_type, index: index %>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+
+      <% unless @cart_items.empty? %>
+        <%= render 'shared/order_summary', cart_items: @cart_items %>
+
+        <div class="d-flex justify-content-between mt-4">
+          <%= link_to "Continue Shopping", root_path, class: "btn btn-outline-primary" %>
+          <%= link_to "Proceed to Checkout", checkout_index_path, class: "btn btn-primary" %>
+        </div>
       <% end %>
-    </tbody>
-  </table>
-
-  <% unless @cart_items.empty? %>
-    <div class="mt-8">
-      <h2 class="text-xl font-bold mb-4">Order Summary</h2>
-      <p>Subtotal $<%= number_with_precision(@cart_total, precision: 2) %></p>
-      <p>Total $<%= number_with_precision(@cart_total, precision: 2) %></p>
     </div>
-
-    <div class="mt-4">
-      <%= link_to "Continue Shopping", root_path %>
-      <%= link_to "Proceed to Checkout", checkout_index_path %>
-    </div>
-  <% end %>
+  </div>
 </div>

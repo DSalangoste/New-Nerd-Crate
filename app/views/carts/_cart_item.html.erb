@@ -1,0 +1,19 @@
+<%# Cart item partial %>
+<tr>
+  <td><%= crate_type.name %></td>
+  <td>
+    <%= form_tag update_quantity_cart_path, method: :patch, class: "d-flex align-items-center" do %>
+      <%= hidden_field_tag :index, index %>
+      <%= number_field_tag :quantity, item["quantity"], min: 1, class: "form-control form-control-sm w-25" %>
+      <%= submit_tag "Update", class: "btn btn-sm btn-outline-primary ms-2" %>
+    <% end %>
+  </td>
+  <td class="text-end"><%= number_to_currency(crate_type.price) %></td>
+  <td class="text-end"><%= number_to_currency(crate_type.price * item["quantity"].to_i) %></td>
+  <td class="text-end">
+    <%= form_tag remove_cart_path, method: :delete do %>
+      <%= hidden_field_tag :index, index %>
+      <%= submit_tag "Remove", class: "btn btn-sm btn-outline-danger" %>
+    <% end %>
+  </td>
+</tr> 
