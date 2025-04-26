@@ -1,26 +1,25 @@
-// SASS variable overrides must be declared before loading Active Admin styles.
+// SASS variable overrides must be declared before loading up Active Admin's styles.
 $primary-color: #2d3748;
 
-// Import Active Admin styles
+// Active Admin mixins
 @import "active_admin/mixins";
+
+// Active Admin styles
 @import "active_admin/base";
 
-// Your custom ActiveAdmin styles can go here 
-
-// Image preview styles
+// Custom styles for image previews
 .image-upload-container {
-  margin-bottom: 20px;
+  margin: 1rem 0;
   
-  img[data-image-preview-target="preview"] {
+  img {
     max-width: 200px;
     max-height: 200px;
-    margin-top: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 5px;
   }
   
-  .hidden {
+  &.hidden {
     display: none;
   }
 } 
