@@ -1,8 +1,8 @@
 // Import variables first
 @import "variables";
 
-// Import Bootstrap
-@import "bootstrap/scss/bootstrap";
+// Import Bootstrap from node_modules
+@import "../../node_modules/bootstrap/scss/bootstrap";
 
 // Base styles
 body {
