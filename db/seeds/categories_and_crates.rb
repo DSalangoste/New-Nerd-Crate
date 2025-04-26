@@ -11,6 +11,10 @@ categories = {
   'Comics' => {
     description: 'Comic books, graphic novels, and superhero merchandise',
     crate_types: ['Comic Crate - Small', 'Comic Crate - Medium', 'Comic Crate - Large']
+  },
+  'Special' => {
+    description: 'Special themed crates that combine multiple categories or offer unique items',
+    crate_types: ['All-in-One Crate', 'Japanese Treats Crate']
   }
 }
 
@@ -18,17 +22,17 @@ categories = {
 crate_types = {
   'Gaming Crate - Small' => {
     price: 30.00,
-    description: 'Monthly gaming goodies and collectibles (Small)',
+    description: 'Gaming goodies and collectibles (Small)',
     category_name: 'Gaming'
   },
   'Gaming Crate - Medium' => {
     price: 50.00,
-    description: 'Monthly gaming goodies and collectibles (Medium)',
+    description: 'Gaming goodies and collectibles (Medium)',
     category_name: 'Gaming'
   },
   'Gaming Crate - Large' => {
     price: 100.00,
-    description: 'Monthly gaming goodies and collectibles (Large)',
+    description: 'Gaming goodies and collectibles (Large)',
     category_name: 'Gaming'
   },
   'Anime Crate - Small' => {
@@ -60,6 +64,16 @@ crate_types = {
     price: 100.00,
     description: 'Comic books and superhero merchandise (Large)',
     category_name: 'Comics'
+  },
+  'All-in-One Crate' => {
+    price: 150.00,
+    description: 'A premium crate featuring a mix of anime, comics, and gaming items',
+    category_name: 'Special'
+  },
+  'Japanese Treats Crate' => {
+    price: 60.00,
+    description: 'A curated selection of Japanese snacks, candies, and treats',
+    category_name: 'Special'
   }
 }
 
