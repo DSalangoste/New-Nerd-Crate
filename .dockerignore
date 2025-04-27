@@ -1,22 +1,24 @@
 # See https://docs.docker.com/engine/reference/builder/#dockerignore-file for more about ignoring files.
 
 # Ignore git directory.
-/.git/
-/.gitignore
+.git
+.gitignore
 
 # Ignore bundler config.
 /.bundle
 
 # Ignore all environment files.
-/.env*
+.env
+.env.*
+!.env.example
 
 # Ignore all default key files.
 /config/master.key
 /config/credentials/*.key
 
 # Ignore all logfiles and tempfiles.
-/log/*
-/tmp/*
+log/*
+tmp/*
 !/log/.keep
 !/tmp/.keep
 
@@ -31,10 +33,12 @@
 !/tmp/storage/.keep
 
 # Ignore assets.
-/node_modules/
+node_modules
 /app/assets/builds/*
 !/app/assets/builds/.keep
-/public/assets
+public/assets
+public/packs
+public/packs-test
 
 # Ignore CI service files.
 /.github
@@ -49,3 +53,13 @@
 # Ignore Docker-related files
 /.dockerignore
 /Dockerfile*
+
+# Additional files to ignore
+coverage/
+spec/tmp
+.byebug_history
+.DS_Store
+.idea
+.vscode
+*.swp
+*.swo

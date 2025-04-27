@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_DB: ${DATABASE_NAME}
+    restart: always
+
+  redis:
+    image: redis:7
+    volumes:
+      - redis_data:/data
+    restart: always
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    command: bundle exec rails server -b 0.0.0.0
+    volumes:
+      - storage_data:/app/storage
+    ports:
+      - "80:3000"
+    environment:
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME}
+      REDIS_URL: redis://redis:6379/1
+      RAILS_ENV: production
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+      RAILS_SERVE_STATIC_FILES: "true"
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+  sidekiq:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    command: bundle exec sidekiq
+    volumes:
+      - storage_data:/app/storage
+    environment:
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME}
+      REDIS_URL: redis://redis:6379/1
+      RAILS_ENV: production
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+volumes:
+  postgres_data:
+  redis_data:
+  storage_data: 
