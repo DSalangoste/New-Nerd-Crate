@@ -14,7 +14,7 @@ gem 'image_processing', '~> 1.2'
 
 # Database and Caching
 gem "pg", "~> 1.1"  # PostgreSQL adapter
-gem 'redis', '~> 4.0'  # Required for Action Cable
+gem 'redis', '~> 5.4'  # Required for Action Cable
 
 # Authentication & Admin
 gem 'sassc-rails', '~> 2.1'
